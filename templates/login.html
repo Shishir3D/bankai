@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+        h2 {
+            text-align: center;
+        }
+        .camera-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        video {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Login</h2>
+    <form action="/login" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <input type="email" name="email" placeholder="Enter your email" required />
+        </div>
+
+        <div class="camera-container">
+            <video id="video" width="100%" autoplay></video>
+            <br>
+            <button type="button" id="captureButton">Capture Photo</button>
+        </div>
+
+        <input type="file" id="photoInput" name="photo" hidden />
+        
+        <br><br>
+        <button type="submit">Login</button>
+    </form>
+</div>
+
+<script>
+  // Set up the webcam stream
+  const video = document.getElementById('video');
+  const captureButton = document.getElementById('captureButton');
+  const photoInput = document.getElementById('photoInput');
+  const form = document.querySelector('form');  // Get the form
+
+  // Start webcam stream
+  navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+          video.srcObject = stream;
+      })
+      .catch(err => {
+          console.error("Error accessing webcam: ", err);
+      });
+
+  // Capture photo when button is clicked
+  captureButton.addEventListener('click', () => {
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      
+      // Convert canvas to image and trigger file input
+      canvas.toBlob(blob => {
+          const file = new File([blob], "photo.jpg", { type: "image/jpeg" });
+          const dataTransfer = new DataTransfer();
+          dataTransfer.items.add(file);
+          photoInput.files = dataTransfer.files;
+
+          // Enable form submission after photo is captured
+          const submitButton = document.querySelector('button[type="submit"]');
+          submitButton.disabled = false;  // Enable the submit button
+      });
+  });
+
+  // Prevent form submission if photo is not captured
+  form.addEventListener('submit', (e) => {
+      if (photoInput.files.length === 0) {
+          e.preventDefault();  // Prevent form submission
+          alert("Please capture a photo first.");
+      }
+  });
+</script>
+
+
+</body>
+</html>
