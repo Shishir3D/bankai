@@ -1,6 +1,6 @@
 import os
 import traceback
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, session, url_for, flash
 from deepface import DeepFace
 from werkzeug.utils import secure_filename
 import shutil  # For deleting temporary files
@@ -84,6 +84,7 @@ def login():
             )
 
             if result['verified']:
+                session['user'] = email
                 flash("Login successful! Welcome.", 'success')
                 return redirect(url_for('home'))
             else:
@@ -98,10 +99,19 @@ def login():
     return render_template('login.html')
 
 
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash("Logged out successfully.", 'success')
+    return redirect(url_for('login'))
 
 @app.route('/home')
 def home():
+    if 'user' not in session:
+        flash("Please login first.", 'warning')
+        return redirect(url_for('login'))
     return render_template('home.html')
+    
 
 if __name__ == '__main__':
     app.run(debug=True)
