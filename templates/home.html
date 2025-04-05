@@ -1,10 +1,181 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Home</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartBank AI - Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Start Internal CSS --- */
+        :root {
+            --primary-color-start: #6a11cb; /* Purple */
+            --primary-color-end: #2575fc;   /* Blue */
+            --secondary-color: #f8f9fa;     /* Light grey/white */
+            --text-color: #333;
+            --text-color-light: #f8f9fa;    /* Light text for dark backgrounds */
+            --border-color: #dee2e6;
+            --container-bg: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --navbar-bg: rgba(255, 255, 255, 0.95); /* Slightly transparent white */
+            --logout-btn-bg: transparent;
+            --logout-btn-text: var(--primary-color-end);
+            --logout-btn-border: var(--primary-color-end);
+            --logout-btn-hover-bg: rgba(37, 117, 252, 0.1); /* Light blue on hover */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary-color-start) 0%, var(--primary-color-end) 100%);
+            color: var(--text-color);
+            padding-top: 80px; /* Add padding to prevent content from hiding behind fixed navbar */
+        }
+
+        /* --- Navbar Styles --- */
+        .navbar {
+            background-color: var(--navbar-bg);
+            box-shadow: 0 2px 5px var(--shadow-color);
+            padding: 15px 0;
+            position: fixed; /* Keep navbar at the top */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000; /* Ensure navbar stays on top */
+            backdrop-filter: blur(5px); /* Optional: Frosted glass effect */
+            -webkit-backdrop-filter: blur(5px); /* Safari support */
+        }
+
+        .nav-container {
+            max-width: 1100px; /* Limit width of navbar content */
+            margin: 0 auto; /* Center the content */
+            padding: 0 20px; /* Padding on smaller screens */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary-color-start);
+            text-decoration: none;
+        }
+
+        #logoutButton {
+            padding: 8px 18px;
+            border: 1px solid var(--logout-btn-border);
+            border-radius: 8px;
+            background-color: var(--logout-btn-bg);
+            color: var(--logout-btn-text);
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.1s ease;
+        }
+
+        #logoutButton:hover {
+            background-color: var(--logout-btn-hover-bg);
+        }
+
+         #logoutButton:active {
+            transform: scale(0.97);
+        }
+
+        /* --- Main Content Area --- */
+        .main-content {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .main-content h2 {
+            font-size: 2.5rem; /* Larger heading for home page */
+            font-weight: 600;
+            color: var(--text-color-light); /* Light text against gradient */
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* Subtle shadow for readability */
+        }
+
+         .main-content p {
+            font-size: 1.1rem;
+            color: var(--text-color-light);
+             opacity: 0.9;
+             max-width: 600px; /* Limit paragraph width */
+             margin: 0 auto; /* Center paragraph */
+        }
+
+        /* Optional: Add a container for content if needed */
+        /*
+        .content-container {
+            background-color: var(--container-bg);
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px var(--shadow-color);
+            width: 100%;
+            max-width: 800px;
+            margin: 30px auto;
+            text-align: left;
+            color: var(--text-color);
+        }
+        .content-container h2 { color: var(--primary-color-start); text-shadow: none; }
+        .content-container p { color: var(--text-color); opacity: 1; }
+        */
+
+        /* --- End Internal CSS --- */
+    </style>
 </head>
 <body>
-  <h2>Welcome to SmartBank AI Home Page!</h2>
+
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="#" class="navbar-brand">SmartBank AI</a>
+            <button type="button" id="logoutButton">Logout</button>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <h2>Welcome to your SmartBank AI Dashboard!</h2>
+        <p>Your intelligent banking experience starts here. Manage your finances with the power of AI.</p>
+
+        <!-- You can add more content sections here -->
+        <!-- Example using the optional content-container: -->
+        <!--
+        <div class="content-container">
+            <h3>Your Accounts</h3>
+            <p>Details about accounts would go here...</p>
+        </div>
+        -->
+
+    </main>
+
+    <script>
+        const logoutButton = document.getElementById('logoutButton');
+
+        logoutButton.addEventListener('click', () => {
+            // Placeholder for actual logout logic
+            console.log("Logout button clicked");
+
+            // Example: Redirect to a logout endpoint
+            // window.location.href = '/logout';
+
+            // Example: Clear local storage and redirect to login
+            // localStorage.removeItem('userToken'); // Or sessionStorage
+            // window.location.href = 'http://127.0.0.1:5500/bankai/templates/login.html'; // Redirect to login page
+
+            alert("Logout functionality would be triggered here."); // Simple feedback for now
+        });
+    </script>
+
 </body>
 </html>
