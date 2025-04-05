@@ -110,7 +110,9 @@ def home():
     if 'user' not in session:
         flash("Please login first.", 'warning')
         return redirect(url_for('login'))
-    return render_template('home.html')
+    user_email = session['user']
+    return render_template('home.html', email=user_email)
+
     
 
 if __name__ == '__main__':
