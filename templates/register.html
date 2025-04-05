@@ -3,188 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>Register - SmartBank AI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* --- Start Internal CSS (Identical to login.html) --- */
+        /* --- Start Internal CSS (Mostly identical to login.html) --- */
         :root {
-            --primary-color-start: #6a11cb; /* Purple */
-            --primary-color-end: #2575fc;   /* Blue */
-            --secondary-color: #f8f9fa;
-            --text-color: #333;
-            --border-color: #dee2e6;
-            --input-bg: #fff;
-            --container-bg: #ffffff;
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --success-color: #28a745;
-            --disabled-color: #adb5bd;
+             /* Same color variables as login.html */
+            --primary-color-start: #6a11cb; --primary-color-end: #2575fc; --secondary-color: #f8f9fa;
+            --text-color: #333; --border-color: #dee2e6; --input-bg: #fff; --container-bg: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1); --success-color: #28a745; --disabled-color: #adb5bd;
             --error-color: #dc3545;
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Poppins', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            font-family: 'Poppins', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh;
             background: linear-gradient(135deg, var(--primary-color-start) 0%, var(--primary-color-end) 100%);
-            color: var(--text-color);
-            padding: 20px;
+            color: var(--text-color); padding: 20px;
         }
-
         .container {
-            background-color: var(--container-bg);
-            padding: 30px 40px;
-            border-radius: 12px;
-            box-shadow: 0 5px 20px var(--shadow-color);
-            width: 100%;
-            max-width: 450px;
-            text-align: center;
+            background-color: var(--container-bg); padding: 30px 40px; border-radius: 12px;
+            box-shadow: 0 5px 20px var(--shadow-color); width: 100%; max-width: 450px; text-align: center;
         }
+        h2 { margin-bottom: 25px; font-weight: 600; font-size: 2rem; color: var(--primary-color-start); }
+        .form-group { margin-bottom: 15px; text-align: left; position: relative; }
 
-        h2 {
-            margin-bottom: 25px;
-            font-weight: 600;
-            font-size: 2rem;
-            color: var(--primary-color-start);
+        input[type="email"], input[type="password"] {
+            width: 100%; padding: 12px 15px; border: 1px solid var(--border-color); border-radius: 8px;
+            font-size: 1rem; background-color: var(--input-bg); transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
-
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
+        input[type="email"]:focus, input[type="password"]:focus {
+            outline: none; border-color: var(--primary-color-end); box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.2);
         }
+        .hidden { display: none; }
 
-        input[type="email"] {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 1rem;
-            background-color: var(--input-bg);
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        input[type="email"]:focus {
-            outline: none;
-            border-color: var(--primary-color-end);
-            box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.2);
-        }
-
-        .camera-container {
-            margin-bottom: 25px;
-            text-align: center;
-        }
-
+        .camera-container { margin-bottom: 25px; text-align: center; }
         video {
-            width: 100%;
-            max-width: 300px;
-            height: auto;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            display: block;
-            margin: 0 auto 15px auto;
-            background-color: #eee;
-            transform: scaleX(-1);
+            width: 100%; max-width: 300px; height: auto; border: 1px solid var(--border-color); border-radius: 8px;
+            display: block; margin: 0 auto 15px auto; background-color: #eee; transform: scaleX(-1);
         }
-
         button {
-            width: 100%;
-            padding: 12px 15px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.3s ease, opacity 0.3s ease, transform 0.1s ease, background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-            margin-top: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 100%; padding: 12px 15px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 500;
+            cursor: pointer; transition: all 0.3s ease; margin-top: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+        button:active { transform: scale(0.98) translateY(1px); box-shadow: none; }
+        button:disabled { background: var(--disabled-color); cursor: not-allowed; opacity: 0.7; box-shadow: none; }
 
-        button:active {
-            transform: scale(0.98) translateY(1px);
-             box-shadow: none;
-        }
-
-        button[type="submit"] {
+        /* Specific Button Styles */
+        #checkEmailBtn { /* Renamed for clarity */
             background: linear-gradient(90deg, var(--primary-color-start) 0%, var(--primary-color-end) 100%);
-            color: white;
-            margin-top: 20px;
+            color: white; margin-top: 5px;
         }
-
-        button[type="submit"]:hover {
-            opacity: 0.9;
-        }
-
-        button[type="submit"]:disabled {
-            background: var(--disabled-color);
-            cursor: not-allowed;
-            opacity: 0.7;
-             box-shadow: none;
-        }
+        #checkEmailBtn:hover { opacity: 0.9; }
 
         #captureButton {
-            background-color: var(--secondary-color);
-            color: var(--primary-color-end);
-            border: 1px solid var(--primary-color-end);
+            background-color: var(--secondary-color); color: var(--primary-color-end); border: 1px solid var(--primary-color-end);
         }
+        #captureButton:hover { background-color: #e9ecef; }
+        #captureButton.captured { background-color: var(--success-color); border-color: var(--success-color); color: white; }
+        #captureButton.error { background-color: var(--error-color); border-color: var(--error-color); color: white; cursor: not-allowed; }
 
-        #captureButton:hover {
-            background-color: #e9ecef;
+        #submitButton { /* Final Register button */
+            background: linear-gradient(90deg, var(--primary-color-start) 0%, var(--primary-color-end) 100%);
+            color: white; margin-top: 20px;
         }
-
-        #captureButton.captured {
-            background-color: var(--success-color);
-            border-color: var(--success-color);
-            color: white;
-        }
-
-         #captureButton.error {
-            background-color: var(--error-color);
-            border-color: var(--error-color);
-            color: white;
-            cursor: not-allowed;
-        }
+         #submitButton:hover { opacity: 0.9; }
 
         .status-message {
-            margin-top: 15px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--success-color);
-            min-height: 1.2em;
-             transition: color 0.3s ease;
+             margin-top: 15px; font-size: 0.9rem; font-weight: 500; min-height: 1.2em; transition: color 0.3s ease;
+             color: var(--success-color); text-align: center;
         }
-        .status-message.error {
-            color: var(--error-color);
-        }
-        .status-message.info {
-             color: #555;
-        }
+        .status-message.error { color: var(--error-color); }
+        .status-message.info { color: #555; }
 
-        input[type="file"] {
-            display: none;
+        .credential-error { /* Specific error span */
+             display: block; color: var(--error-color); font-size: 0.85rem;
+             min-height: 1em; margin-top: 5px; text-align: left;
         }
-        .page-link {
-             margin-top: 20px;
-             font-size: 0.9em;
-              color: #555;
-        }
-
-        .page-link a {
-             color: var(--primary-color-end);
-             text-decoration: none;
-             font-weight: 500;
-        }
-         .page-link a:hover {
-            text-decoration: underline;
-         }
+        input[type="file"] { display: none; }
+        .page-link { margin-top: 20px; font-size: 0.9em; color: #555; }
+        .page-link a { color: var(--primary-color-end); text-decoration: none; font-weight: 500; }
+        .page-link a:hover { text-decoration: underline; }
         /* --- End Internal CSS --- */
     </style>
 </head>
@@ -193,181 +93,200 @@
 <div class="container">
     <h2>Register</h2>
     <form id="registerForm" action="/register" method="POST" enctype="multipart/form-data">
-        <div class="form-group">
-            <input type="email" id="email" name="email" placeholder="Enter your email" required />
+
+        <!-- Step 1: Credentials -->
+        <div id="credentialSection">
+            <div class="form-group">
+                <input type="email" id="email" name="email" placeholder="Enter your email" required />
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" name="password" placeholder="Create a password" required />
+            </div>
+             <div class="form-group">
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required />
+                 <span id="credentialError" class="credential-error"></span> <!-- Error message placeholder -->
+            </div>
+            <button type="button" id="checkEmailBtn">Check Email & Proceed</button>
         </div>
 
-        <div class="camera-container">
+        <!-- Step 2: Camera Authentication (Initially Hidden) -->
+        <div id="cameraSection" class="camera-container hidden">
             <video id="video" autoplay playsinline muted></video>
-            <button type="button" id="captureButton">Capture Photo</button>
+            <button type="button" id="captureButton" disabled>Capture Photo</button>
             <div id="statusMessage" class="status-message"></div>
         </div>
 
-        <input type="file" id="photoInput" name="photo" accept="image/jpeg" required />
+        <!-- Hidden input for the photo -->
+        <input type="file" id="photoInput" name="photo" accept="image/jpeg" />
 
-        <button type="submit" id="submitButton" disabled>Register</button>
+        <!-- Final Submit Button (Initially Hidden/Disabled) -->
+        <button type="submit" id="submitButton" class="hidden" disabled>Register</button>
     </form>
+
     <p class="page-link">
         Already have an account? <a href="http://127.0.0.1:5500/bankai/templates/login.html">Login here</a>
     </p>
 </div>
 
 <script>
-    // --- JavaScript for Registration (Uses identical functions as Login) ---
+    // --- Elements ---
+    const registerForm = document.getElementById('registerForm');
+    const credentialSection = document.getElementById('credentialSection');
+    const cameraSection = document.getElementById('cameraSection');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword'); // New field
+    const checkEmailBtn = document.getElementById('checkEmailBtn');
+    const credentialError = document.getElementById('credentialError');
     const video = document.getElementById('video');
     const captureButton = document.getElementById('captureButton');
-    const photoInput = document.getElementById('photoInput');
-    const form = document.getElementById('registerForm'); // Specific ID for this form
-    const submitButton = document.getElementById('submitButton');
     const statusMessage = document.getElementById('statusMessage');
+    const photoInput = document.getElementById('photoInput');
+    const submitButton = document.getElementById('submitButton');
+
     let stream = null;
     let isCapturing = false;
 
-    // --- Re-usable Helper Functions (Identical to login.html) ---
-    function setStatus(message, type = 'info') {
+    // --- Helper Functions (Identical to Login) ---
+     function setStatus(message, type = 'info') { /* ... copy from login.html ... */
         statusMessage.textContent = message;
-        statusMessage.className = 'status-message'; // Reset classes
-        if (type === 'error') {
-            statusMessage.classList.add('error');
-        } else if (type === 'success') {
-             statusMessage.classList.add('success');
-        } else {
-             statusMessage.classList.add('info');
-        }
-    }
-
-     function setCaptureButtonState(state, text = null) {
+        statusMessage.className = 'status-message';
+        if (type === 'error') statusMessage.classList.add('error');
+        else if (type === 'success') statusMessage.classList.add('success');
+        else statusMessage.classList.add('info');
+     }
+     function setCaptureButtonState(state, text = null) { /* ... copy from login.html ... */
         captureButton.disabled = false;
-        captureButton.classList.remove('captured', 'error'); // Reset states
-        captureButton.textContent = text || captureButton.textContent;
-
+        captureButton.classList.remove('captured', 'error');
+        if (text) captureButton.textContent = text;
         switch (state) {
-            case 'initial':
-                captureButton.textContent = 'Capture Photo';
-                break;
-            case 'captured':
-                 captureButton.classList.add('captured');
-                 captureButton.textContent = 'Retake Photo';
-                break;
-            case 'error':
-                 captureButton.classList.add('error');
-                 captureButton.textContent = text || 'Webcam Error';
-                 captureButton.disabled = true;
-                break;
-            case 'capturing':
-                 captureButton.textContent = 'Capturing...';
-                 captureButton.disabled = true;
-                break;
-             case 'disabled':
-                 captureButton.disabled = true;
-                 break;
+            case 'initial': captureButton.textContent = 'Capture Photo'; captureButton.disabled = false; break;
+            case 'captured': captureButton.classList.add('captured'); captureButton.textContent = 'Retake Photo'; break;
+            case 'error': captureButton.classList.add('error'); captureButton.textContent = text || 'Webcam Error'; captureButton.disabled = true; break;
+            case 'capturing': captureButton.textContent = 'Capturing...'; captureButton.disabled = true; break;
+            case 'disabled': captureButton.disabled = true; break;
         }
-    }
+     }
 
-    async function startWebcam() {
+    // --- Webcam Logic (Identical to Login) ---
+    async function startWebcam() { /* ... copy from login.html ... */
         setStatus('Initializing webcam...', 'info');
         try {
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-            }
+            if (stream) stream.getTracks().forEach(track => track.stop());
             stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
             video.srcObject = stream;
-             await new Promise((resolve, reject) => {
-                 video.onloadedmetadata = () => {
-                     video.play().then(resolve).catch(reject);
-                 };
-                 video.onerror = (e) => reject(new Error('Video element error: ' + e.message));
-            });
-            setStatus('');
+            await new Promise(resolve => video.onloadedmetadata = resolve);
+            await video.play();
+            setStatus('Webcam ready. Please capture your photo.', 'info');
             setCaptureButtonState('initial');
+             captureButton.disabled = false;
         } catch (err) {
             console.error("Error accessing webcam: ", err);
-            setStatus('Error: Could not access webcam. Please grant permission.', 'error');
+            setStatus('Error: Could not access webcam.', 'error');
             setCaptureButtonState('error');
         }
-    }
+     }
 
-    captureButton.addEventListener('click', () => {
-         if (isCapturing) return;
+    // --- Step 1: Check Email & Password ---
+    checkEmailBtn.addEventListener('click', async () => {
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
 
-       if (!stream || !video.videoWidth || video.readyState < video.HAVE_CURRENT_DATA) {
-            setStatus('Webcam not ready. Please wait or check permissions.', 'error');
-            console.warn("Capture attempted before video ready state was sufficient.");
-            return;
+        // Basic Client-side validation
+        credentialError.textContent = ''; // Clear previous errors
+        if (!email || !password || !confirmPassword) {
+            credentialError.textContent = 'All fields are required.'; return;
         }
+        if (password !== confirmPassword) {
+            credentialError.textContent = 'Passwords do not match.'; return;
+        }
+        // Optional: Add password strength check here if desired
 
-        isCapturing = true;
-        setStatus('Capturing...', 'info');
-        setCaptureButtonState('capturing');
+         checkEmailBtn.disabled = true;
+         checkEmailBtn.textContent = 'Checking...';
 
+        try {
+            // *** IMPORTANT: Replace '/check-registration' with your actual backend endpoint ***
+            // This endpoint should check if the email exists and maybe validate password complexity server-side
+            const response = await fetch('/check-registration', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                // Send email AND password so backend can store/validate if needed before photo
+                body: JSON.stringify({ email, password })
+            });
 
+             if (!response.ok) {
+                 let errorMessage = `Registration check failed (Status: ${response.status})`;
+                 try { const errorResult = await response.json(); errorMessage = errorResult.message || errorMessage; } catch (e) {}
+                 throw new Error(errorMessage);
+             }
+
+            const result = await response.json(); // Expect { success: true } if email is available
+
+            if (result.success) {
+                // Email Available: Hide Step 1, Show Step 2
+                credentialSection.classList.add('hidden');
+                cameraSection.classList.remove('hidden');
+                submitButton.classList.remove('hidden'); // Show final button, keep disabled
+                 setStatus('Email available. Preparing camera...', 'success');
+                 await startWebcam();
+            } else {
+                 throw new Error(result.message || 'This email is already registered.');
+            }
+
+        } catch (error) {
+            console.error('Registration check error:', error);
+            credentialError.textContent = error.message || 'An error occurred.';
+             setStatus('');
+        } finally {
+             checkEmailBtn.disabled = false;
+             checkEmailBtn.textContent = 'Check Email & Proceed';
+        }
+    });
+
+    // --- Step 2: Capture Photo (Identical to Login) ---
+    captureButton.addEventListener('click', () => { /* ... copy from login.html ... */
+         if (isCapturing || captureButton.disabled) return;
+         if (!stream || !video.videoWidth || video.readyState < video.HAVE_CURRENT_DATA) { setStatus('Webcam not ready.', 'error'); return; }
+        isCapturing = true; setStatus('Capturing...', 'info'); setCaptureButtonState('capturing');
         setTimeout(() => {
-            const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            const context = canvas.getContext('2d');
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-            canvas.toBlob(blob => {
-                 if (!blob) {
-                    console.error("Canvas to Blob conversion failed");
-                    setStatus('Error capturing photo.', 'error');
-                    setCaptureButtonState('initial');
-                    isCapturing = false;
-                    return;
-                }
-                const fileName = `register_photo_${Date.now()}.jpg`;
-                const file = new File([blob], fileName, { type: "image/jpeg", lastModified: Date.now() });
-
-                const dataTransfer = new DataTransfer();
-                dataTransfer.items.add(file);
-                photoInput.files = dataTransfer.files;
-
-                setStatus('Photo captured!', 'success');
-                setCaptureButtonState('captured');
-                submitButton.disabled = false;
-                isCapturing = false;
-
-            }, 'image/jpeg', 0.9);
+             const canvas = document.createElement('canvas'); canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+             const context = canvas.getContext('2d'); context.drawImage(video, 0, 0, canvas.width, canvas.height);
+             canvas.toBlob(blob => {
+                 if (!blob) { setStatus('Error capturing photo.', 'error'); setCaptureButtonState('initial'); isCapturing = false; return; }
+                 const fileName = `register_photo_${Date.now()}.jpg`;
+                 const file = new File([blob], fileName, { type: "image/jpeg", lastModified: Date.now() });
+                 const dataTransfer = new DataTransfer(); dataTransfer.items.add(file);
+                 photoInput.files = dataTransfer.files;
+                 setStatus('Photo captured! Ready to register.', 'success');
+                 setCaptureButtonState('captured');
+                 submitButton.disabled = false; // *** Enable the FINAL Register button ***
+                 isCapturing = false;
+             }, 'image/jpeg', 0.9);
         }, 50);
-    });
+     });
 
-    form.addEventListener('submit', (e) => {
-        if (photoInput.files.length === 0) {
-            e.preventDefault();
-            setStatus("Please capture a photo first.", 'error');
-            captureButton.style.outline = '2px solid red';
-             setTimeout(() => { captureButton.style.outline = 'none'; }, 1500);
-        } else {
-             submitButton.textContent = 'Registering...';
+    // --- Final Form Submission ---
+    registerForm.addEventListener('submit', (e) => {
+        // The form will submit email, password, confirmPassword, and photo
+         if (photoInput.files.length === 0 && !cameraSection.classList.contains('hidden')) {
+             e.preventDefault();
+             setStatus("Please capture a photo before registering.", 'error');
              submitButton.disabled = true;
+         } else if (!submitButton.disabled) {
+            submitButton.textContent = 'Registering...';
+            submitButton.disabled = true;
              setCaptureButtonState('disabled');
+            // Allow native form submission to proceed (sends email, password, photo to '/register')
+        } else {
+            e.preventDefault();
         }
     });
 
-   // Start webcam on page load
-    window.addEventListener('load', startWebcam);
+    // --- Initial Setup ---
+    // Don't start webcam on load
 
-   // Optional: Handle permission changes dynamically
-    if (navigator.permissions) {
-        navigator.permissions.query({ name: 'camera' }).then(permissionStatus => {
-            permissionStatus.onchange = () => {
-                console.log('Camera permission status changed:', permissionStatus.state);
-                if (permissionStatus.state !== 'granted') {
-                    setStatus('Camera permission was revoked.', 'error');
-                    submitButton.disabled = true;
-                    setCaptureButtonState('error', 'Permission Denied');
-                     if (stream) stream.getTracks().forEach(track => track.stop());
-                     video.srcObject = null;
-                     video.poster = '';
-
-                } else if (!stream) {
-                    setStatus('Permission granted. Initializing webcam...', 'info');
-                    startWebcam();
-                }
-            };
-        });
-    }
 </script>
 
 </body>

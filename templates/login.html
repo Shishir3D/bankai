@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login - SmartBank AI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -20,172 +20,84 @@
             --shadow-color: rgba(0, 0, 0, 0.1);
             --success-color: #28a745;
             --disabled-color: #adb5bd;
-            --error-color: #dc3545;
+            --error-color: #dc3545; /* Red for errors */
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Poppins', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            font-family: 'Poppins', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh;
             background: linear-gradient(135deg, var(--primary-color-start) 0%, var(--primary-color-end) 100%);
-            color: var(--text-color);
-            padding: 20px; /* Add padding for smaller screens */
+            color: var(--text-color); padding: 20px;
         }
-
         .container {
-            background-color: var(--container-bg);
-            padding: 30px 40px;
-            border-radius: 12px;
-            box-shadow: 0 5px 20px var(--shadow-color);
-            width: 100%;
-            max-width: 450px;
-            text-align: center;
+            background-color: var(--container-bg); padding: 30px 40px; border-radius: 12px;
+            box-shadow: 0 5px 20px var(--shadow-color); width: 100%; max-width: 450px; text-align: center;
         }
+        h2 { margin-bottom: 25px; font-weight: 600; font-size: 2rem; color: var(--primary-color-start); }
+        .form-group { margin-bottom: 15px; text-align: left; position: relative; } /* Added relative positioning */
 
-        h2 {
-            margin-bottom: 25px;
-            font-weight: 600;
-            font-size: 2rem;
-            color: var(--primary-color-start);
+        input[type="email"], input[type="password"] { /* Style password input */
+            width: 100%; padding: 12px 15px; border: 1px solid var(--border-color); border-radius: 8px;
+            font-size: 1rem; background-color: var(--input-bg); transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
-
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
+        input[type="email"]:focus, input[type="password"]:focus {
+            outline: none; border-color: var(--primary-color-end); box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.2);
         }
+        /* --- Hide/Show Sections --- */
+        .hidden { display: none; }
 
-        input[type="email"] {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 1rem;
-            background-color: var(--input-bg);
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        input[type="email"]:focus {
-            outline: none;
-            border-color: var(--primary-color-end);
-            box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.2);
-        }
-
-        .camera-container {
-            margin-bottom: 25px;
-            text-align: center;
-        }
-
+        .camera-container { margin-bottom: 25px; text-align: center; }
         video {
-            width: 100%;
-            max-width: 300px;
-            height: auto; /* Maintain aspect ratio */
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            display: block;
-            margin: 0 auto 15px auto;
-            background-color: #eee; /* Placeholder background */
-            transform: scaleX(-1); /* Mirror front camera visually */
+            width: 100%; max-width: 300px; height: auto; border: 1px solid var(--border-color); border-radius: 8px;
+            display: block; margin: 0 auto 15px auto; background-color: #eee; transform: scaleX(-1);
         }
-
         button {
-            width: 100%;
-            padding: 12px 15px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.3s ease, opacity 0.3s ease, transform 0.1s ease, background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-            margin-top: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow */
+            width: 100%; padding: 12px 15px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 500;
+            cursor: pointer; transition: all 0.3s ease; margin-top: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+        button:active { transform: scale(0.98) translateY(1px); box-shadow: none; }
+        button:disabled { background: var(--disabled-color); cursor: not-allowed; opacity: 0.7; box-shadow: none; }
 
-        button:active {
-            transform: scale(0.98) translateY(1px); /* Press effect */
-             box-shadow: none;
-        }
-
-        button[type="submit"] {
+        /* Specific Button Styles */
+        #verifyBtn { /* Style for the first button */
             background: linear-gradient(90deg, var(--primary-color-start) 0%, var(--primary-color-end) 100%);
-            color: white;
-            margin-top: 20px;
+            color: white; margin-top: 5px; /* Less margin */
         }
+        #verifyBtn:hover { opacity: 0.9; }
 
-        button[type="submit"]:hover {
-            opacity: 0.9;
+        #captureButton { /* Existing capture button */
+            background-color: var(--secondary-color); color: var(--primary-color-end); border: 1px solid var(--primary-color-end);
         }
+        #captureButton:hover { background-color: #e9ecef; }
+        #captureButton.captured { background-color: var(--success-color); border-color: var(--success-color); color: white; }
+        #captureButton.error { background-color: var(--error-color); border-color: var(--error-color); color: white; cursor: not-allowed; }
 
-        button[type="submit"]:disabled {
-            background: var(--disabled-color);
-            cursor: not-allowed;
-            opacity: 0.7;
-             box-shadow: none;
+        #submitButton { /* Final Login button */
+            background: linear-gradient(90deg, var(--primary-color-start) 0%, var(--primary-color-end) 100%);
+            color: white; margin-top: 20px;
         }
-
-        #captureButton {
-            background-color: var(--secondary-color);
-            color: var(--primary-color-end);
-            border: 1px solid var(--primary-color-end);
-        }
-
-        #captureButton:hover {
-            background-color: #e9ecef;
-        }
-
-        #captureButton.captured {
-            background-color: var(--success-color);
-            border-color: var(--success-color);
-            color: white;
-        }
-
-        #captureButton.error { /* Style for error state */
-            background-color: var(--error-color);
-            border-color: var(--error-color);
-            color: white;
-            cursor: not-allowed;
-        }
+        #submitButton:hover { opacity: 0.9; }
 
         .status-message {
-            margin-top: 15px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--success-color);
-            min-height: 1.2em; /* Reserve space */
-            transition: color 0.3s ease;
+            margin-top: 15px; font-size: 0.9rem; font-weight: 500; min-height: 1.2em; transition: color 0.3s ease;
+             color: var(--success-color); /* Default success */
+             text-align: center;
         }
-        .status-message.error {
-            color: var(--error-color);
-        }
-        .status-message.info {
-             color: #555; /* Neutral info color */
+        .status-message.error { color: var(--error-color); }
+        .status-message.info { color: #555; }
+
+        .credential-error { /* Specific error for email/pass */
+             display: block; /* Make it take space */
+             color: var(--error-color);
+             font-size: 0.85rem;
+             min-height: 1em; /* Prevent layout shifts */
+             margin-top: 5px;
+             text-align: left;
         }
 
-        input[type="file"] {
-            display: none; /* Hide the default file input */
-        }
-
-        .page-link {
-             margin-top: 20px;
-             font-size: 0.9em;
-             color: #555; /* Slightly muted text */
-        }
-
-        .page-link a {
-             color: var(--primary-color-end);
-             text-decoration: none;
-             font-weight: 500;
-        }
-         .page-link a:hover {
-            text-decoration: underline;
-         }
+        input[type="file"] { display: none; }
+        .page-link { margin-top: 20px; font-size: 0.9em; color: #555; }
+        .page-link a { color: var(--primary-color-end); text-decoration: none; font-weight: 500; }
+        .page-link a:hover { text-decoration: underline; }
         /* --- End Internal CSS --- */
     </style>
 </head>
@@ -193,189 +105,210 @@
 
 <div class="container">
     <h2>Login</h2>
+    <!-- Change form action/method if needed -->
     <form id="loginForm" action="/login" method="POST" enctype="multipart/form-data">
-        <div class="form-group">
-            <input type="email" id="email" name="email" placeholder="Enter your email" required />
+
+        <!-- Step 1: Credentials -->
+        <div id="credentialSection">
+            <div class="form-group">
+                <label for="email" class="hidden">Email</label> <!-- Hidden label for accessibility -->
+                <input type="email" id="email" name="email" placeholder="Enter your email" required />
+            </div>
+            <div class="form-group">
+                <label for="password" class="hidden">Password</label> <!-- Hidden label -->
+                <input type="password" id="password" name="password" placeholder="Enter your password" required />
+                 <span id="credentialError" class="credential-error"></span> <!-- Error message placeholder -->
+            </div>
+            <button type="button" id="verifyBtn">Verify Credentials</button>
         </div>
 
-        <div class="camera-container">
+        <!-- Step 2: Camera Authentication (Initially Hidden) -->
+        <div id="cameraSection" class="camera-container hidden">
             <video id="video" autoplay playsinline muted></video>
-            <button type="button" id="captureButton">Capture Photo</button>
+            <button type="button" id="captureButton" disabled>Capture Photo</button> <!-- Start disabled -->
             <div id="statusMessage" class="status-message"></div>
         </div>
 
-        <input type="file" id="photoInput" name="photo" accept="image/jpeg" required /> <!-- 'required' here might be overridden by JS logic -->
+        <!-- Hidden input for the photo -->
+        <input type="file" id="photoInput" name="photo" accept="image/jpeg" />
 
-        <button type="submit" id="submitButton" disabled>Login</button>
+        <!-- Final Submit Button (Initially Hidden/Disabled) -->
+        <button type="submit" id="submitButton" class="hidden" disabled>Login</button>
     </form>
+
     <p class="page-link">
         Don't have an account? <a href="http://127.0.0.1:5500/bankai/templates/register.html">Register here</a>
     </p>
 </div>
 
 <script>
+    // --- Elements ---
+    const loginForm = document.getElementById('loginForm');
+    const credentialSection = document.getElementById('credentialSection');
+    const cameraSection = document.getElementById('cameraSection');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const credentialError = document.getElementById('credentialError');
     const video = document.getElementById('video');
     const captureButton = document.getElementById('captureButton');
-    const photoInput = document.getElementById('photoInput');
-    const form = document.getElementById('loginForm');
-    const submitButton = document.getElementById('submitButton');
     const statusMessage = document.getElementById('statusMessage');
-    let stream = null;
-    let isCapturing = false; // Flag to prevent rapid clicks
+    const photoInput = document.getElementById('photoInput');
+    const submitButton = document.getElementById('submitButton'); // Final login button
 
-    function setStatus(message, type = 'info') {
+    let stream = null;
+    let isCapturing = false;
+
+    // --- Helper Functions ---
+     function setStatus(message, type = 'info') {
         statusMessage.textContent = message;
         statusMessage.className = 'status-message'; // Reset classes
-        if (type === 'error') {
-            statusMessage.classList.add('error');
-        } else if (type === 'success') {
-             statusMessage.classList.add('success'); // Ensure success class is added if needed (default color is success)
-        } else {
-             statusMessage.classList.add('info');
-        }
+        if (type === 'error') statusMessage.classList.add('error');
+        else if (type === 'success') statusMessage.classList.add('success');
+        else statusMessage.classList.add('info');
     }
 
      function setCaptureButtonState(state, text = null) {
-        captureButton.disabled = false;
-        captureButton.classList.remove('captured', 'error'); // Reset states
-        captureButton.textContent = text || captureButton.textContent; // Use provided text or keep current
+         captureButton.disabled = false;
+         captureButton.classList.remove('captured', 'error');
+         if (text) captureButton.textContent = text;
 
         switch (state) {
-            case 'initial':
-                captureButton.textContent = 'Capture Photo';
-                break;
-            case 'captured':
-                 captureButton.classList.add('captured');
-                 captureButton.textContent = 'Retake Photo';
-                break;
-            case 'error':
-                 captureButton.classList.add('error');
-                 captureButton.textContent = text || 'Webcam Error';
-                 captureButton.disabled = true;
-                break;
-            case 'capturing':
-                 captureButton.textContent = 'Capturing...';
-                 captureButton.disabled = true;
-                break;
-            case 'disabled':
-                 captureButton.disabled = true;
-                 break;
+            case 'initial': captureButton.textContent = 'Capture Photo'; captureButton.disabled = false; break;
+            case 'captured': captureButton.classList.add('captured'); captureButton.textContent = 'Retake Photo'; break;
+            case 'error': captureButton.classList.add('error'); captureButton.textContent = text || 'Webcam Error'; captureButton.disabled = true; break;
+            case 'capturing': captureButton.textContent = 'Capturing...'; captureButton.disabled = true; break;
+            case 'disabled': captureButton.disabled = true; break;
         }
     }
 
-
+    // --- Webcam Logic ---
     async function startWebcam() {
         setStatus('Initializing webcam...', 'info');
         try {
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-            }
+            if (stream) stream.getTracks().forEach(track => track.stop());
             stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
             video.srcObject = stream;
-            // Wait for the video to be ready to play
-            await new Promise((resolve, reject) => {
-                 video.onloadedmetadata = () => {
-                     video.play().then(resolve).catch(reject);
-                 };
-                 video.onerror = (e) => reject(new Error('Video element error: ' + e.message));
-            });
-            setStatus(''); // Clear status on success
-            setCaptureButtonState('initial');
+            await new Promise(resolve => video.onloadedmetadata = resolve);
+            await video.play();
+            setStatus('Webcam ready. Please capture your photo.', 'info');
+             setCaptureButtonState('initial'); // Enable capture button once webcam is ready
+             captureButton.disabled = false; // Explicitly enable
         } catch (err) {
             console.error("Error accessing webcam: ", err);
-            setStatus('Error: Could not access webcam. Please grant permission.', 'error');
+            setStatus('Error: Could not access webcam.', 'error');
             setCaptureButtonState('error');
         }
     }
 
-    captureButton.addEventListener('click', () => {
-        if (isCapturing) return; // Prevent action if already capturing
+    // --- Step 1: Verify Credentials ---
+    verifyBtn.addEventListener('click', async () => {
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
 
-        if (!stream || !video.videoWidth || video.readyState < video.HAVE_CURRENT_DATA) {
-             setStatus('Webcam not ready. Please wait or check permissions.', 'error');
-             console.warn("Capture attempted before video ready state was sufficient.");
+        // Basic Client-side validation
+        if (!email || !password) {
+            credentialError.textContent = 'Email and password are required.';
             return;
         }
+         credentialError.textContent = ''; // Clear previous error
+         verifyBtn.disabled = true;
+         verifyBtn.textContent = 'Verifying...';
 
+        try {
+            // *** IMPORTANT: Replace '/validate-credentials' with your actual backend endpoint ***
+            const response = await fetch('/validate-credentials', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            // Check if response is OK (status 200-299)
+            if (!response.ok) {
+                 // Try to parse error message from backend, or use default
+                 let errorMessage = `Verification failed (Status: ${response.status})`;
+                 try {
+                     const errorResult = await response.json();
+                     errorMessage = errorResult.message || errorMessage;
+                 } catch (e) { /* Ignore parsing error */ }
+                 throw new Error(errorMessage);
+            }
+
+            const result = await response.json(); // Assuming backend sends { success: true } or similar
+
+            if (result.success) {
+                // Credentials Valid: Hide Step 1, Show Step 2
+                credentialSection.classList.add('hidden');
+                cameraSection.classList.remove('hidden');
+                submitButton.classList.remove('hidden'); // Show final login button, but keep disabled
+                 setStatus('Credentials verified. Preparing camera...', 'success');
+                 await startWebcam(); // Initialize webcam only after successful validation
+            } else {
+                 // Should ideally be caught by !response.ok, but handle explicit false just in case
+                throw new Error(result.message || 'Invalid email or password.');
+            }
+
+        } catch (error) {
+            console.error('Verification error:', error);
+            credentialError.textContent = error.message || 'An error occurred during verification.';
+            setStatus(''); // Clear general status
+        } finally {
+             verifyBtn.disabled = false;
+             verifyBtn.textContent = 'Verify Credentials';
+        }
+    });
+
+    // --- Step 2: Capture Photo ---
+    captureButton.addEventListener('click', () => {
+         if (isCapturing || captureButton.disabled) return;
+         if (!stream || !video.videoWidth || video.readyState < video.HAVE_CURRENT_DATA) {
+            setStatus('Webcam not ready. Please wait.', 'error'); return;
+         }
         isCapturing = true;
         setStatus('Capturing...', 'info');
         setCaptureButtonState('capturing');
 
-        // Short delay allows UI update before canvas operations
-        setTimeout(() => {
-            const canvas = document.createElement('canvas');
-            // Use naturalWidth/Height if available for higher res, else videoWidth/Height
-            canvas.width = video.videoWidth; // Use actual rendered size
-            canvas.height = video.videoHeight;
-            const context = canvas.getContext('2d');
+        setTimeout(() => { // Short delay for UI update
+             const canvas = document.createElement('canvas');
+             canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+             const context = canvas.getContext('2d');
+             context.drawImage(video, 0, 0, canvas.width, canvas.height);
+             canvas.toBlob(blob => {
+                 if (!blob) { /* Handle error */ setStatus('Error capturing photo.', 'error'); setCaptureButtonState('initial'); isCapturing = false; return; }
+                 const fileName = `login_photo_${Date.now()}.jpg`;
+                 const file = new File([blob], fileName, { type: "image/jpeg", lastModified: Date.now() });
+                 const dataTransfer = new DataTransfer();
+                 dataTransfer.items.add(file);
+                 photoInput.files = dataTransfer.files;
 
-            // Draw the video frame to the canvas
-            // The video element itself is mirrored via CSS, so draw it directly
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-            canvas.toBlob(blob => {
-                if (!blob) {
-                    console.error("Canvas to Blob conversion failed");
-                    setStatus('Error capturing photo.', 'error');
-                    setCaptureButtonState('initial'); // Reset button state
-                    isCapturing = false;
-                    return;
-                }
-                const fileName = `login_photo_${Date.now()}.jpg`;
-                const file = new File([blob], fileName, { type: "image/jpeg", lastModified: Date.now() });
-
-                const dataTransfer = new DataTransfer();
-                dataTransfer.items.add(file);
-                photoInput.files = dataTransfer.files; // Set the file input
-
-                setStatus('Photo captured!', 'success');
-                setCaptureButtonState('captured');
-                submitButton.disabled = false; // Enable form submission
-                isCapturing = false;
-
-            }, 'image/jpeg', 0.9); // Quality 0.9
-        }, 50); // Small delay like 50ms
+                 setStatus('Photo captured! Ready to login.', 'success');
+                 setCaptureButtonState('captured');
+                 submitButton.disabled = false; // *** Enable the FINAL Login button ***
+                 isCapturing = false;
+             }, 'image/jpeg', 0.9);
+        }, 50);
     });
 
-    form.addEventListener('submit', (e) => {
-        // Re-check just before submitting
-        if (photoInput.files.length === 0) {
-            e.preventDefault(); // Stop submission
-            setStatus("Please capture a photo first.", 'error');
-             // Optional: visually indicate the capture button needs action
-             captureButton.style.outline = '2px solid red';
-             setTimeout(() => { captureButton.style.outline = 'none'; }, 1500);
+    // --- Final Form Submission ---
+    loginForm.addEventListener('submit', (e) => {
+        // Double check photo exists before native form submission
+        if (photoInput.files.length === 0 && !cameraSection.classList.contains('hidden')) {
+            e.preventDefault(); // Prevent submission
+            setStatus("Please capture a photo before logging in.", 'error');
+            submitButton.disabled = true; // Re-disable submit if somehow bypassed
+        } else if (!submitButton.disabled) {
+            submitButton.textContent = 'Logging In...';
+            submitButton.disabled = true;
+            setCaptureButtonState('disabled'); // Disable capture during final submit
+            // Allow native form submission to proceed (sends email and photo to '/login')
         } else {
-             // Optional: Show loading state on submit
-             submitButton.textContent = 'Logging In...';
-             submitButton.disabled = true;
-             setCaptureButtonState('disabled'); // Disable capture during submit
+             e.preventDefault(); // Should not happen, but prevent submission if button is disabled
         }
     });
 
-    // Start webcam on page load
-    window.addEventListener('load', startWebcam);
-
-    // Optional: Handle permission changes dynamically
-    if (navigator.permissions) {
-        navigator.permissions.query({ name: 'camera' }).then(permissionStatus => {
-            permissionStatus.onchange = () => {
-                console.log('Camera permission status changed:', permissionStatus.state);
-                if (permissionStatus.state !== 'granted') {
-                    setStatus('Camera permission was revoked.', 'error');
-                    submitButton.disabled = true;
-                    setCaptureButtonState('error', 'Permission Denied');
-                     if (stream) stream.getTracks().forEach(track => track.stop());
-                     video.srcObject = null;
-                     video.poster = ''; // Remove any poster image
-
-                } else if (!stream) { // If permission granted again AND stream is not active
-                    setStatus('Permission granted. Initializing webcam...', 'info');
-                    startWebcam();
-                }
-            };
-        });
-    }
+    // --- Initial Setup ---
+    // Don't start webcam on load anymore
+    // window.addEventListener('load', startWebcam); // REMOVED
 
 </script>
 
