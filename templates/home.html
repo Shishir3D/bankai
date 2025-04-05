@@ -140,7 +140,9 @@
     <header class="navbar">
         <div class="nav-container">
             <a href="#" class="navbar-brand">SmartBank AI</a>
-            <button type="button" id="logoutButton">Logout</button>
+            <form id="logoutform" action="/logout" method="GET">
+              <button type="submit" id="logoutButton">Logout</button>
+            </form>
         </div>
     </header>
 
@@ -158,24 +160,6 @@
         -->
 
     </main>
-
-    <script>
-        const logoutButton = document.getElementById('logoutButton');
-
-        logoutButton.addEventListener('click', () => {
-            // Placeholder for actual logout logic
-            console.log("Logout button clicked");
-
-            // Example: Redirect to a logout endpoint
-            // window.location.href = '/logout';
-
-            // Example: Clear local storage and redirect to login
-            // localStorage.removeItem('userToken'); // Or sessionStorage
-            // window.location.href = 'http://127.0.0.1:5500/bankai/templates/login.html'; // Redirect to login page
-
-            alert("Logout functionality would be triggered here."); // Simple feedback for now
-        });
-    </script>
 
 </body>
 </html>
