@@ -23,6 +23,7 @@
             --logout-btn-text: var(--primary-color-end);
             --logout-btn-border: var(--primary-color-end);
             --logout-btn-hover-bg: rgba(37, 117, 252, 0.1); /* Light blue on hover */
+            --success-color: #28a745;
         }
 
         * {
@@ -41,6 +42,9 @@
             background: linear-gradient(135deg, var(--primary-color-start) 0%, var(--primary-color-end) 100%);
             color: var(--text-color);
             padding-top: 80px; /* Add padding to prevent content from hiding behind fixed navbar */
+            display: flex; /* Use flexbox for centering content */
+            flex-direction: column; /* Stack header and main vertically */
+            align-items: center; /* Center items horizontally */
         }
 
         /* --- Navbar Styles --- */
@@ -73,6 +77,7 @@
             text-decoration: none;
         }
 
+        /* Style logout button like a link/button */
         #logoutButton {
             padding: 8px 18px;
             border: 1px solid var(--logout-btn-border);
@@ -82,6 +87,8 @@
             font-size: 0.95rem;
             font-weight: 500;
             cursor: pointer;
+            text-decoration: none; /* Remove default link underline */
+            display: inline-block; /* Allow padding and alignment */
             transition: background-color 0.3s ease, color 0.3s ease, transform 0.1s ease;
         }
 
@@ -97,41 +104,80 @@
         .main-content {
             padding: 40px 20px;
             text-align: center;
+            max-width: 800px; /* Limit width of main content */
+            width: 100%; /* Take full width up to max-width */
+            margin-top: 20px; /* Add some space below navbar */
         }
 
         .main-content h2 {
             font-size: 2.5rem; /* Larger heading for home page */
             font-weight: 600;
             color: var(--text-color-light); /* Light text against gradient */
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* Subtle shadow for readability */
         }
 
-         .main-content p {
+         .main-content .welcome-message {
+            font-size: 1.2rem;
+            color: var(--text-color-light);
+             opacity: 0.95;
+             margin-bottom: 25px; /* Space below welcome message */
+        }
+         .main-content .welcome-message strong {
+             font-weight: 600;
+             color: #fff; /* Make email stand out slightly */
+         }
+
+        .main-content p {
             font-size: 1.1rem;
             color: var(--text-color-light);
              opacity: 0.9;
              max-width: 600px; /* Limit paragraph width */
-             margin: 0 auto; /* Center paragraph */
+             margin: 0 auto 20px auto; /* Center paragraph and add bottom margin */
+             line-height: 1.6;
         }
 
-        /* Optional: Add a container for content if needed */
-        /*
-        .content-container {
+        /* Optional container for structured content */
+        .content-box {
             background-color: var(--container-bg);
             padding: 30px 40px;
             border-radius: 12px;
             box-shadow: 0 5px 20px var(--shadow-color);
             width: 100%;
-            max-width: 800px;
             margin: 30px auto;
             text-align: left;
             color: var(--text-color);
         }
-        .content-container h2 { color: var(--primary-color-start); text-shadow: none; }
-        .content-container p { color: var(--text-color); opacity: 1; }
-        */
+        .content-box h3 {
+             color: var(--primary-color-start);
+             margin-bottom: 15px;
+             font-weight: 600;
+        }
+        .content-box p {
+            color: var(--text-color);
+            opacity: 1;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            max-width: none; /* Override max-width inside the box */
+            text-align: left;
+        }
 
+        /* Flash Messages Styling (Copy from login.html) */
+        .flash-messages {
+            list-style: none; padding: 0; margin-bottom: 20px; /* Add margin below messages */
+            width: 100%; /* Make flash messages take width within content area */
+            max-width: 600px; /* Limit width */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .flash-messages li {
+            padding: 10px 15px; margin-bottom: 10px; border-radius: 5px;
+            font-weight: 500; text-align: center; /* Center text in flash */
+        }
+        .flash-messages .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .flash-messages .danger { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .flash-messages .warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+        .flash-messages .info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
         /* --- End Internal CSS --- */
     </style>
 </head>
@@ -139,28 +185,56 @@
 
     <header class="navbar">
         <div class="nav-container">
-            <a href="#" class="navbar-brand">SmartBank AI</a>
-            <form id="logoutform" action="/logout" method="GET">
-              <button type="submit" id="logoutButton">Logout</button>
-            </form>
+            <a href="{{ url_for('home') }}" class="navbar-brand">SmartBank AI</a>
+            <!-- Simple link for logout -->
+            <a href="{{ url_for('logout') }}" id="logoutButton">Logout</a>
         </div>
     </header>
 
     <main class="main-content">
-        <h2>Welcome to your SmartBank AI Dashboard!</h2>
-        <p id="username">Hello, {{ email }}</p>
+        <!-- Flash Messages Placeholder -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <ul class="flash-messages">
+            {% for category, message in messages %}
+              <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+
+        <h2>Welcome to your Dashboard!</h2>
+        <!-- Display the user's email from the session -->
+        <p class="welcome-message">Hello, <strong>{{ email }}</strong></p>
         <p>Your intelligent banking experience starts here. Manage your finances with the power of AI.</p>
 
-        <!-- You can add more content sections here -->
-        <!-- Example using the optional content-container: -->
-        <!--
-        <div class="content-container">
-            <h3>Your Accounts</h3>
-            <p>Details about accounts would go here...</p>
+        <!-- Example using the content-box -->
+        <div class="content-box">
+            <h3>Account Overview</h3>
+            <p>This is where your account summaries, recent transactions, or other personalized banking information would be displayed.</p>
+            <p>Future features could include:</p>
+            <ul>
+                <li>Balance details</li>
+                <li>Transaction history</li>
+                <li>AI-powered spending insights</li>
+                <li>Budgeting tools</li>
+            </ul>
         </div>
-        -->
+
+         <div class="content-box">
+            <h3>Security Center</h3>
+            <p>Your account is secured with multi-factor authentication including facial recognition.</p>
+            <p>Remember to keep your password secure and contact support if you suspect any unusual activity.</p>
+         </div>
 
     </main>
+
+    <!-- Optional Footer -->
+    <!--
+    <footer style="color: var(--text-color-light); opacity: 0.7; text-align: center; padding: 20px; margin-top: auto;">
+        © 2023 SmartBank AI. All rights reserved.
+    </footer>
+     -->
 
 </body>
 </html>
