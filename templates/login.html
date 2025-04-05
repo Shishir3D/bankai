@@ -3,24 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - SmartBank AI</title>
+    <!-- Changed Title -->
+    <title>Islington Bank - Login</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- ** EMAILJS SDK ** -->
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js">
+    </script>
+    <script type="text/javascript">
+       // Initialize EmailJS here or later in the script tag
+       (function(){
+          // !!!!!!!!!! IMPORTANT !!!!!!!!!!
+          // ---> REPLACE 'YOUR_PUBLIC_KEY' WITH YOUR ACTUAL EMAILJS PUBLIC KEY <---
+          emailjs.init("27SuHysyonmYOdm2d"); // Your EmailJS public key
+          // !!!!!!!!!! IMPORTANT !!!!!!!!!!
+          console.log("EmailJS SDK Initialized");
+       })();
+    </script>
     <style>
-        /* --- Start Internal CSS --- */
-        :root {
-            --primary-color-start: #6a11cb; /* Purple */
-            --primary-color-end: #2575fc;   /* Blue */
+        /* --- CSS Styles (Islington Bank theme) --- */
+         :root {
+            --primary-color-start: #004aad; /* Islington Blue Dark */
+            --primary-color-end: #0078d4;   /* Islington Blue Light */
             --secondary-color: #f8f9fa;
             --text-color: #333;
             --border-color: #dee2e6;
             --input-bg: #fff;
             --container-bg: #ffffff;
             --shadow-color: rgba(0, 0, 0, 0.1);
-            --success-color: #28a745;
+            --success-color: #1c7c45; /* Islington Green */
             --disabled-color: #adb5bd;
-            --error-color: #dc3545; /* Red for errors */
+            --error-color: #d13438; /* Islington Red */
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -33,28 +48,27 @@
             box-shadow: 0 5px 20px var(--shadow-color); width: 100%; max-width: 450px; text-align: center;
         }
         h2 { margin-bottom: 25px; font-weight: 600; font-size: 2rem; color: var(--primary-color-start); }
-        .form-group { margin-bottom: 15px; text-align: left; position: relative; } /* Added relative positioning */
+        .form-group { margin-bottom: 15px; text-align: left; position: relative; }
 
-        label.hidden { /* Keep labels for accessibility but hide visually */
+        label.hidden {
             position: absolute; width: 1px; height: 1px; padding: 0;
             margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0);
             white-space: nowrap; border-width: 0;
         }
 
-        input[type="email"], input[type="password"] { /* Style password input */
+        input[type="email"], input[type="password"] {
             width: 100%; padding: 12px 15px; border: 1px solid var(--border-color); border-radius: 8px;
             font-size: 1rem; background-color: var(--input-bg); transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
         input[type="email"]:focus, input[type="password"]:focus {
-            outline: none; border-color: var(--primary-color-end); box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.2);
+            outline: none; border-color: var(--primary-color-end); box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.2);
         }
-        /* --- Hide/Show Sections --- */
-        .hidden { display: none !important; } /* Use important to override potential conflicts */
+        .hidden { display: none !important; }
 
         .camera-container { margin-bottom: 25px; text-align: center; }
         video {
             width: 100%; max-width: 300px; height: auto; border: 1px solid var(--border-color); border-radius: 8px;
-            display: block; margin: 0 auto 15px auto; background-color: #eee; transform: scaleX(-1); /* Mirror mode */
+            display: block; margin: 0 auto 15px auto; background-color: #eee; transform: scaleX(-1);
         }
         button {
             width: 100%; padding: 12px 15px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 500;
@@ -63,69 +77,60 @@
         button:active { transform: scale(0.98) translateY(1px); box-shadow: none; }
         button:disabled { background: var(--disabled-color); cursor: not-allowed; opacity: 0.7; box-shadow: none; }
 
-        /* Specific Button Styles */
-        #verifyBtn { /* Style for the first button */
+        #verifyBtn {
             background: linear-gradient(90deg, var(--primary-color-start) 0%, var(--primary-color-end) 100%);
-            color: white; margin-top: 5px; /* Less margin */
+            color: white; margin-top: 5px;
         }
         #verifyBtn:hover:not(:disabled) { opacity: 0.9; }
 
-        #captureButton { /* Existing capture button */
+        #captureButton {
             background-color: var(--secondary-color); color: var(--primary-color-end); border: 1px solid var(--primary-color-end);
         }
         #captureButton:hover:not(:disabled) { background-color: #e9ecef; }
         #captureButton.captured { background-color: var(--success-color); border-color: var(--success-color); color: white; }
         #captureButton.error { background-color: var(--error-color); border-color: var(--error-color); color: white; cursor: not-allowed; }
 
-        #submitButton { /* Final Login button */
+        #submitButton {
             background: linear-gradient(90deg, var(--primary-color-start) 0%, var(--primary-color-end) 100%);
             color: white; margin-top: 20px;
         }
-        #submitButton:hover:not(:disabled) { opacity: 0.9; }
+         #submitButton:hover:not(:disabled) { opacity: 0.9; }
 
-        /* Status Messages */
-        .status-message { /* General status under camera */
-            margin-top: 15px; font-size: 0.9rem; font-weight: 500; min-height: 1.2em; transition: color 0.3s ease;
-             color: #555; /* Default info */
-             text-align: center;
+        .status-message {
+             margin-top: 15px; font-size: 0.9rem; font-weight: 500; min-height: 1.2em; transition: color 0.3s ease;
+             color: #555; text-align: center;
         }
         .status-message.error { color: var(--error-color); }
         .status-message.success { color: var(--success-color); }
 
-        .credential-error { /* Specific error for email/pass */
-             display: block; /* Make it take space */
-             color: var(--error-color);
-             font-size: 0.85rem;
-             min-height: 1em; /* Prevent layout shifts */
-             margin-top: 5px;
-             text-align: left;
-             font-weight: 500;
+        .credential-error {
+             display: block; color: var(--error-color); font-size: 0.85rem;
+             min-height: 1em; margin-top: 5px; text-align: left; font-weight: 500;
         }
-
-        input[type="file"] { display: none; } /* Hide the actual file input */
+        input[type="file"] { display: none; }
         .page-link { margin-top: 20px; font-size: 0.9em; color: #555; }
         .page-link a { color: var(--primary-color-end); text-decoration: none; font-weight: 500; }
         .page-link a:hover { text-decoration: underline; }
 
-        /* Flash Messages Styling (Optional but good) */
-        .flash-messages {
-            list-style: none; padding: 0; margin-bottom: 15px;
-        }
-        .flash-messages li {
-            padding: 10px 15px; margin-bottom: 10px; border-radius: 5px;
-            font-weight: 500; text-align: left;
-        }
-        .flash-messages .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        /* Flash message styling */
+        .flash-messages { list-style: none; padding: 0; margin-bottom: 15px; }
+        .flash-messages li { padding: 10px 15px; margin-bottom: 10px; border-radius: 5px; font-weight: 500; text-align: left; }
+        .flash-messages .success { background-color: #d3f0e0; color: #0f5132; border: 1px solid #bcdccf; }
         .flash-messages .danger { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .flash-messages .warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
-        .flash-messages .info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .flash-messages .warning { background-color: #fff3cd; color: #664d03; border: 1px solid #ffe69c; }
+        .flash-messages .info { background-color: #cce5ff; color: #084298; border: 1px solid #b6d4fe; }
         /* --- End Internal CSS --- */
     </style>
 </head>
 <body>
 
+<!-- Hidden inputs populated by Flask on redirect -->
+<input type="hidden" id="securityAlertFlag" value="{{ 'true' if security_alert else 'false' }}">
+<input type="hidden" id="alertRecipientEmail" value="{{ alert_email or '' }}">
+
 <div class="container">
-    <h2>Login</h2>
+    <!-- Changed Heading -->
+    <h2>Islington Bank Login</h2>
 
     <!-- Flash Messages Placeholder -->
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -145,14 +150,12 @@
         <div id="credentialSection">
             <div class="form-group">
                 <label for="email" class="hidden">Email</label>
-                <!-- IMPORTANT: Keep name="email" for final form submission -->
                 <input type="email" id="email" name="email" placeholder="Enter your email" required aria-label="Email"/>
             </div>
             <div class="form-group">
                 <label for="password" class="hidden">Password</label>
-                <!-- Password is NOT submitted in the final step, only used for validation -->
                 <input type="password" id="password" placeholder="Enter your password" required aria-label="Password"/>
-                 <span id="credentialError" class="credential-error"></span> <!-- Error message placeholder -->
+                 <span id="credentialError" class="credential-error"></span>
             </div>
             <button type="button" id="verifyBtn">Verify Credentials</button>
         </div>
@@ -160,14 +163,13 @@
         <!-- Step 2: Camera Authentication (Initially Hidden) -->
         <div id="cameraSection" class="camera-container hidden">
              <h3>Facial Authentication</h3>
-             <p style="font-size:0.9em; color:#555; margin-bottom:15px;">Position your face in the frame and capture.</p>
+             <p style="font-size:0.9em; color:#555; margin-bottom:15px;">Position your face clearly in the frame.</p>
             <video id="video" autoplay playsinline muted></video>
             <button type="button" id="captureButton" disabled>Initializing Camera...</button>
             <div id="statusMessage" class="status-message"></div>
         </div>
 
-        <!-- Hidden input for the photo (submitted in final step) -->
-        <!-- IMPORTANT: Keep name="photo" -->
+        <!-- Hidden input for the photo -->
         <input type="file" id="photoInput" name="photo" accept="image/jpeg" />
 
         <!-- Final Submit Button (Initially Hidden/Disabled) -->
@@ -187,37 +189,39 @@
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
     const verifyBtn = document.getElementById('verifyBtn');
-    const credentialError = document.getElementById('credentialError'); // Span for credential errors
+    const credentialError = document.getElementById('credentialError');
     const video = document.getElementById('video');
     const captureButton = document.getElementById('captureButton');
-    const statusMessage = document.getElementById('statusMessage'); // Status under camera
-    const photoInput = document.getElementById('photoInput'); // Hidden file input
-    const submitButton = document.getElementById('submitButton'); // Final login button
+    const statusMessage = document.getElementById('statusMessage');
+    const photoInput = document.getElementById('photoInput');
+    const submitButton = document.getElementById('submitButton');
+    // Flags from Flask template
+    const securityAlertFlag = document.getElementById('securityAlertFlag').value === 'true';
+    const alertRecipientEmail = document.getElementById('alertRecipientEmail').value;
+
 
     let stream = null;
     let isCapturing = false;
     let validatedEmail = ''; // Store validated email
 
     // --- Helper Functions ---
-     function setStatus(message, type = 'info') {
+    function setStatus(message, type = 'info') {
         statusMessage.textContent = message;
         statusMessage.className = 'status-message'; // Reset classes
         if (type === 'error') statusMessage.classList.add('error');
         else if (type === 'success') statusMessage.classList.add('success');
-        // 'info' is the default (no extra class needed beyond reset)
     }
 
     function setCaptureButtonState(state, text = null) {
          captureButton.disabled = false;
          captureButton.classList.remove('captured', 'error');
          if (text) captureButton.textContent = text;
-
         switch (state) {
             case 'initial': captureButton.textContent = 'Capture Photo'; captureButton.disabled = false; break;
             case 'captured': captureButton.classList.add('captured'); captureButton.textContent = 'Retake Photo'; break;
             case 'error': captureButton.classList.add('error'); captureButton.textContent = text || 'Webcam Error'; captureButton.disabled = true; break;
             case 'capturing': captureButton.textContent = 'Capturing...'; captureButton.disabled = true; break;
-            case 'disabled': captureButton.textContent = 'Capture Photo'; captureButton.disabled = true; break; // Reset text but keep disabled
+            case 'disabled': captureButton.textContent = 'Capture Photo'; captureButton.disabled = true; break;
             case 'initializing': captureButton.textContent = 'Initializing Camera...'; captureButton.disabled = true; break;
         }
     }
@@ -225,22 +229,15 @@
     // --- Webcam Logic ---
     async function startWebcam() {
         setStatus('Initializing webcam...', 'info');
-        setCaptureButtonState('initializing'); // Indicate camera is starting
+        setCaptureButtonState('initializing');
         try {
-            // Stop previous stream if any
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-            }
+            if (stream) { stream.getTracks().forEach(track => track.stop()); }
             stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
             video.srcObject = stream;
-
-            // Wait for metadata to load to prevent errors
             await new Promise(resolve => video.onloadedmetadata = resolve);
-            await video.play(); // Start playing the video stream
-
+            await video.play();
             setStatus('Webcam ready. Please capture your photo.', 'info');
-            setCaptureButtonState('initial'); // Enable capture button
-
+            setCaptureButtonState('initial');
         } catch (err) {
             console.error("Error accessing webcam: ", err);
             let errorMsg = 'Error: Could not access webcam.';
@@ -251,7 +248,7 @@
             }
             setStatus(errorMsg, 'error');
             setCaptureButtonState('error', 'Webcam Error');
-            submitButton.disabled = true; // Ensure login is disabled if camera fails
+            submitButton.disabled = true;
         }
     }
 
@@ -259,9 +256,53 @@
         if (stream) {
             stream.getTracks().forEach(track => track.stop());
             stream = null;
-            video.srcObject = null; // Clear the video element
+            video.srcObject = null;
             console.log("Webcam stopped.");
         }
+    }
+
+    // --- ** Updated EmailJS Sending Function ** ---
+    function sendSecurityAlertEmail(recipientEmail) {
+        if (!recipientEmail) {
+            console.error("Cannot send security alert: Recipient email is missing.");
+            return;
+        }
+        if (typeof emailjs === 'undefined' || typeof emailjs.send !== 'function') {
+             console.error("EmailJS SDK not loaded or initialized correctly.");
+             setStatus('Error sending security alert. Please contact support.', 'error');
+             return;
+        }
+
+        const serviceID = 'service_gb4abwo'; // Your Service ID
+        const templateID = 'template_d7ne43g'; // Your Template ID (using the security alert HTML)
+
+        // ** Parameters matching the updated HTML template structure **
+        const templateParams = {
+            // Standard EmailJS param, matches {{to_email}} in the template
+            to_email: recipientEmail,
+
+            // Custom params defined in the security alert HTML template:
+            username: "Valued Customer", // Using a generic term as getting username here is complex
+            time_of_attempt: new Date().toLocaleString(), // Current date/time
+            current_year: new Date().getFullYear()        // Optional year for footer
+
+            // We are NOT sending a single 'message' or 'name' parameter anymore,
+            // as the structure is built into the EmailJS HTML template itself.
+            // The 'subject' should be configured in the EmailJS template settings online.
+        };
+
+        console.log(`Attempting to send security alert email to ${recipientEmail} using ServiceID: ${serviceID}, TemplateID: ${templateID}`);
+        console.log("Parameters being sent:", templateParams);
+
+        emailjs.send(serviceID, templateID, templateParams)
+            .then((response) => {
+               console.log('SUCCESS! Security alert email sent via EmailJS.', response.status, response.text);
+               // No extra status message needed here, Flask already flashed the alert message.
+            }, (error) => {
+               console.error('FAILED to send security alert email via EmailJS:', error);
+               // Update status to inform user about the email sending failure specifically
+               setStatus('Login denied. Failed to send security alert email.', 'error');
+            });
     }
 
 
@@ -270,48 +311,39 @@
         const email = emailInput.value.trim();
         const password = passwordInput.value;
 
-        // Basic Client-side validation
-        credentialError.textContent = ''; // Clear previous error
+        credentialError.textContent = '';
         if (!email || !password) {
-            credentialError.textContent = 'Email and password are required.';
-            return;
+            credentialError.textContent = 'Email and password are required.'; return;
         }
 
          verifyBtn.disabled = true;
          verifyBtn.textContent = 'Verifying...';
 
         try {
-            // Fetch request to the backend validation endpoint
-            const response = await fetch('/validate-credentials', { // Use the new endpoint
+            const response = await fetch('/validate-credentials', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }) // Send as JSON
+                body: JSON.stringify({ email, password })
             });
-
-            const result = await response.json(); // Always expect JSON back
+            const result = await response.json();
 
             if (response.ok && result.success) {
-                // Credentials Valid: Hide Step 1, Show Step 2
-                validatedEmail = email; // Store email for later
+                validatedEmail = email; // Store email used for validation
                 credentialSection.classList.add('hidden');
                 cameraSection.classList.remove('hidden');
-                submitButton.classList.remove('hidden'); // Show final login button, but keep disabled initially
-                submitButton.disabled = true; // Explicitly disable until photo is captured
+                submitButton.classList.remove('hidden');
+                submitButton.disabled = true; // Disable until photo capture
                 setStatus('Credentials verified. Preparing camera...', 'success');
-                await startWebcam(); // Initialize webcam AFTER successful validation
-
+                await startWebcam();
             } else {
-                 // Display error message from backend response
                  credentialError.textContent = result.message || 'Invalid credentials or server error.';
-                 setStatus(''); // Clear camera status message
+                 setStatus('');
             }
-
         } catch (error) {
             console.error('Verification error:', error);
             credentialError.textContent = 'An error occurred connecting to the server.';
-            setStatus(''); // Clear camera status message
+            setStatus('');
         } finally {
-             // Re-enable button regardless of outcome
              verifyBtn.disabled = false;
              verifyBtn.textContent = 'Verify Credentials';
         }
@@ -320,98 +352,124 @@
     // --- Step 2: Capture Photo ---
     captureButton.addEventListener('click', () => {
          if (isCapturing || captureButton.disabled || !stream) return;
-
-         // Check if video is actually playing and has dimensions
          if (video.readyState < video.HAVE_CURRENT_DATA || !video.videoWidth) {
-            setStatus('Webcam not ready yet. Please wait.', 'error');
-            return;
+             setStatus('Webcam not ready yet. Please wait.', 'error'); return;
          }
-
         isCapturing = true;
         setStatus('Capturing...', 'info');
         setCaptureButtonState('capturing');
 
-        // Use setTimeout to allow UI to update before canvas operations
         setTimeout(() => {
              try {
                  const canvas = document.createElement('canvas');
-                 canvas.width = video.videoWidth;
-                 canvas.height = video.videoHeight;
+                 canvas.width = video.videoWidth; canvas.height = video.videoHeight;
                  const context = canvas.getContext('2d');
-
-                 // Flip the image horizontally before drawing if video is mirrored
-                 if (video.style.transform === 'scaleX(-1)') {
-                     context.translate(canvas.width, 0);
-                     context.scale(-1, 1);
+                 if (video.style.transform === 'scaleX(-1)') { // Handle mirror
+                    context.translate(canvas.width, 0); context.scale(-1, 1);
                  }
                  context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-                 // Convert canvas to Blob
                  canvas.toBlob(blob => {
                      if (!blob) {
-                         setStatus('Error capturing photo. Blob creation failed.', 'error');
-                         setCaptureButtonState('initial');
-                         isCapturing = false;
-                         submitButton.disabled = true;
-                         return;
+                         setStatus('Error capturing photo (blob creation failed).', 'error'); setCaptureButtonState('initial');
+                         isCapturing = false; submitButton.disabled = true; return;
                      }
-                     // Create a File object from the Blob
                      const fileName = `login_photo_${Date.now()}.jpg`;
                      const file = new File([blob], fileName, { type: "image/jpeg", lastModified: Date.now() });
-
-                     // Use DataTransfer to set the files property of the hidden input
-                     const dataTransfer = new DataTransfer();
-                     dataTransfer.items.add(file);
+                     const dataTransfer = new DataTransfer(); dataTransfer.items.add(file);
                      photoInput.files = dataTransfer.files;
 
-                     console.log("Photo captured and assigned to input:", photoInput.files[0]);
+                     console.log("Photo captured and assigned:", photoInput.files[0]);
                      setStatus('Photo captured! Ready to login.', 'success');
-                     setCaptureButtonState('captured'); // Change button state/text
-                     submitButton.disabled = false; // *** Enable the FINAL Login button ***
-
-                 }, 'image/jpeg', 0.9); // Use JPEG format with quality 0.9
-
+                     setCaptureButtonState('captured');
+                     submitButton.disabled = false; // Enable FINAL Login button
+                 }, 'image/jpeg', 0.9); // Quality 90%
              } catch (err) {
                  console.error("Error during photo capture:", err);
                  setStatus('Error processing photo capture.', 'error');
-                 setCaptureButtonState('initial'); // Reset button
+                 setCaptureButtonState('initial');
                  submitButton.disabled = true;
              } finally {
-                 isCapturing = false; // Reset capturing flag
+                 isCapturing = false;
              }
-        }, 50); // 50ms delay
+        }, 50); // Small delay for UI update
     });
 
     // --- Final Form Submission ---
     loginForm.addEventListener('submit', (e) => {
-        // Double check photo exists before allowing native form submission
-        // Also ensure the camera section is actually visible (meaning credentials passed)
+        // Final check: Ensure email used for verification matches the input field value
+        // (prevents user changing email after validation but before camera step)
+        const currentEmail = emailInput.value.trim();
+        if (validatedEmail && currentEmail !== validatedEmail) {
+             e.preventDefault();
+             credentialSection.classList.remove('hidden'); // Show credentials again
+             cameraSection.classList.add('hidden');      // Hide camera
+             submitButton.classList.add('hidden');       // Hide submit
+             submitButton.disabled = true;
+             credentialError.textContent = 'Email was changed after validation. Please re-verify credentials.';
+             setStatus(''); // Clear camera status
+             stopWebcam();
+             validatedEmail = ''; // Reset validated email
+             console.warn("Email changed after validation. Preventing submission.");
+             return; // Stop submission
+        }
+
+        // Proceed with original checks
         if (!cameraSection.classList.contains('hidden') && photoInput.files.length === 0) {
-            e.preventDefault(); // Prevent submission
+            e.preventDefault();
             setStatus("Please capture your photo before logging in.", 'error');
-            submitButton.disabled = true; // Re-disable submit if somehow bypassed
-            setCaptureButtonState('initial'); // Reset capture button if needed
+            submitButton.disabled = true;
+            setCaptureButtonState('initial');
         } else if (submitButton.disabled) {
-            e.preventDefault(); // Prevent submission if button is disabled
+            e.preventDefault();
             console.warn("Submit button clicked while disabled.");
         } else {
-            // Allow submission, disable buttons to prevent double-submit
+            // Allow submission
             submitButton.textContent = 'Logging In...';
             submitButton.disabled = true;
-            setCaptureButtonState('disabled'); // Disable capture during final submit
-            stopWebcam(); // Stop the webcam stream before navigating away
-            // Native form submission proceeds (sends email and photo to '/login')
+            setCaptureButtonState('disabled');
+            stopWebcam();
             console.log("Form submitting...");
+            // Ensure the hidden email field has the validated email before submit
+             if(validatedEmail){
+                // If the email input is visible, ensure it still has the correct value
+                // If hidden, it doesn't matter as much as the 'name=email' input will be submitted
+                emailInput.value = validatedEmail;
+             }
+             // Native form submission proceeds
         }
     });
 
     // --- Page Navigation Handling ---
-    // Stop webcam if the user navigates away
     window.addEventListener('beforeunload', stopWebcam);
 
     // --- Initial Setup ---
-    // No automatic webcam start on load anymore.
-    console.log("Login page script loaded.");
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log("Login page script loaded.");
+        submitButton.disabled = true; // Ensure disabled initially
+
+        // *** Check if a security alert needs to be sent on page load ***
+        if (securityAlertFlag && alertRecipientEmail) {
+            console.log("Security alert flag is set. Triggering email send to:", alertRecipientEmail);
+            // Check if EmailJS is ready before sending
+            if (typeof emailjs !== 'undefined' && typeof emailjs.send === 'function') {
+                 sendSecurityAlertEmail(alertRecipientEmail);
+            } else {
+                 console.error("EmailJS not ready when trying to send alert on load.");
+                 // Optionally add a small delay and retry, or just rely on the error message
+                 setTimeout(() => {
+                     if (typeof emailjs !== 'undefined' && typeof emailjs.send === 'function') {
+                          console.log("Retrying email send after short delay...");
+                          sendSecurityAlertEmail(alertRecipientEmail);
+                     } else {
+                          console.error("EmailJS still not ready after delay.");
+                          setStatus('Error sending security alert (SDK issue). Please contact support.', 'error');
+                     }
+                 }, 500); // Wait 500ms
+            }
+        } else {
+             console.log("No security alert flag detected on load.");
+        }
+    });
 
 </script>
 
