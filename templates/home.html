@@ -3,146 +3,880 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Changed Title -->
-    <title>Islington Bank - Home</title>
+    <title>Islington Bank - Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
     <style>
-        /* --- CSS Styles (Use the updated Islington Bank theme) --- */
+        /* --- Base Styles & Variables --- */
         :root {
             --primary-color-start: #004aad; /* Islington Blue Dark */
             --primary-color-end: #0078d4;   /* Islington Blue Light */
-            --secondary-color: #f8f9fa;
-            --text-color: #333;
-            --text-color-light: #f8f9fa;
-            --border-color: #dee2e6;
-            --container-bg: #ffffff;
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --navbar-bg: rgba(255, 255, 255, 0.95);
-            --logout-btn-bg: transparent;
-            --logout-btn-text: var(--primary-color-end);
-            --logout-btn-border: var(--primary-color-end);
-            --logout-btn-hover-bg: rgba(0, 120, 212, 0.1);
-            --success-color: #1c7c45; /* Islington Green */
+            --secondary-color: #f4f7fa;     /* Even Lighter grey background */
+            --accent-color: #1c7c45;        /* Islington Green */
+            --text-color: #343a40;
+            --text-color-light: #6c757d;
+            --text-on-primary: #ffffff;
+            --border-color: #eef2f7;        /* Softer border */
+            --card-bg: #ffffff;
+            --body-bg: var(--secondary-color);
+            --shadow-color: rgba(100, 115, 140, 0.1); /* Softer, diffused shadow */
+            --danger-color: #d13438;
+            --success-color: var(--accent-color);
+            --warning-color: #ffc107;
+            --border-radius: 16px; /* Consistent larger radius */
+            --navbar-height: 70px;
         }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; }
+
         body {
-            font-family: 'Poppins', sans-serif; min-height: 100vh;
-            background: linear-gradient(135deg, var(--primary-color-start) 0%, var(--primary-color-end) 100%);
-            color: var(--text-color); padding-top: 80px;
-            display: flex; flex-direction: column; align-items: center;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--body-bg);
+            color: var(--text-color);
+            padding-top: var(--navbar-height);
+            line-height: 1.6;
         }
+
         /* --- Navbar Styles --- */
         .navbar {
-            background-color: var(--navbar-bg); box-shadow: 0 2px 5px var(--shadow-color);
-            padding: 15px 0; position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
-            backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
-        }
-        .nav-container {
-            max-width: 1100px; margin: 0 auto; padding: 0 20px;
-            display: flex; justify-content: space-between; align-items: center;
+            background-color: var(--card-bg); box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Lighter shadow */
+            padding: 0 30px; height: var(--navbar-height);
+            position: fixed; top: 0; left: 0; width: 100%;
+            z-index: 1000; display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
         }
         .navbar-brand {
-            font-size: 1.6rem; font-weight: 700; color: var(--primary-color-start);
-            text-decoration: none;
+            font-size: 1.7rem; font-weight: 700; color: var(--primary-color-start); text-decoration: none;
         }
         #logoutButton {
-            padding: 8px 18px; border: 1px solid var(--logout-btn-border); border-radius: 8px;
-            background-color: var(--logout-btn-bg); color: var(--logout-btn-text);
-            font-size: 0.95rem; font-weight: 500; cursor: pointer; text-decoration: none;
-            display: inline-block; transition: background-color 0.3s ease, color 0.3s ease, transform 0.1s ease;
+            padding: 9px 20px; border: 1px solid var(--primary-color-end); border-radius: 8px;
+            background-color: transparent; color: var(--primary-color-end); font-size: 0.9rem; font-weight: 500;
+            cursor: pointer; text-decoration: none; display: inline-block; transition: all 0.3s ease;
         }
-        #logoutButton:hover { background-color: var(--logout-btn-hover-bg); }
+        #logoutButton:hover { background-color: rgba(0, 120, 212, 0.08); }
         #logoutButton:active { transform: scale(0.97); }
 
-        /* --- Main Content Area --- */
+        /* --- Main Content & Welcome Header --- */
         .main-content {
-            padding: 40px 20px; text-align: center; max-width: 800px;
-            width: 100%; margin-top: 20px;
+            max-width: 1300px; margin: 35px auto; padding: 0 30px;
         }
-        .main-content h2 {
-            font-size: 2.5rem; font-weight: 600; color: var(--text-color-light);
-            margin-bottom: 15px; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-        }
-         .main-content .welcome-message {
-            font-size: 1.2rem; color: var(--text-color-light); opacity: 0.95;
-             margin-bottom: 25px;
-        }
-         .main-content .welcome-message strong { font-weight: 600; color: #fff; }
+        .welcome-header { margin-bottom: 35px; }
+        .welcome-header h2 { font-size: 2.3rem; font-weight: 600; color: var(--text-color); margin-bottom: 5px; }
+        .welcome-header p { font-size: 1.15rem; color: var(--text-color-light); }
+        .welcome-header strong { color: var(--primary-color-start); font-weight: 600; }
 
-        .main-content p {
-            font-size: 1.1rem; color: var(--text-color-light); opacity: 0.9;
-             max-width: 600px; margin: 0 auto 20px auto; line-height: 1.6;
+        /* --- Section Styling --- */
+        .dashboard-section { margin-bottom: 45px; }
+        .section-title {
+            font-size: 1.5rem; font-weight: 600;
+            color: var(--text-color); margin-bottom: 25px;
         }
 
-        .content-box {
-            background-color: var(--container-bg); padding: 30px 40px; border-radius: 12px;
-            box-shadow: 0 5px 20px var(--shadow-color); width: 100%; margin: 30px auto;
-            text-align: left; color: var(--text-color);
+        /* --- Dashboard Grid Layout (Main Cards) --- */
+        .dashboard-grid {
+            display: grid;
+            /* Adjusted to typically fit 2-3 main cards nicely */
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
         }
-        .content-box h3 { color: var(--primary-color-start); margin-bottom: 15px; font-weight: 600; }
-        .content-box p { color: var(--text-color); opacity: 1; font-size: 1rem; margin-bottom: 10px; max-width: none; text-align: left; }
-        .content-box ul { margin-left: 20px; padding-left: 15px; } /* Basic list styling */
-        .content-box li { margin-bottom: 5px; }
 
-        /* Use the same flash message styling */
-        .flash-messages { list-style: none; padding: 0; margin-bottom: 20px; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; }
-        .flash-messages li { padding: 10px 15px; margin-bottom: 10px; border-radius: 5px; font-weight: 500; text-align: center; }
-        .flash-messages .success { background-color: #d3f0e0; color: #0f5132; border: 1px solid #bcdccf; }
-        .flash-messages .danger { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .flash-messages .warning { background-color: #fff3cd; color: #664d03; border: 1px solid #ffe69c; }
-        .flash-messages .info { background-color: #cce5ff; color: #084298; border: 1px solid #b6d4fe; }
-        /* --- End Internal CSS --- */
+        /* --- Card Styling (Enhanced) --- */
+        .card {
+            background-color: var(--card-bg); border-radius: var(--border-radius);
+            box-shadow: 0 6px 20px var(--shadow-color); /* Enhanced shadow */
+            padding: 30px; transition: transform 0.25s ease, box-shadow 0.25s ease;
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(100, 115, 140, 0.15);
+        }
+        .card-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin: -30px -30px 25px -30px; /* Extend header background */
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: #fcfdff; /* Slightly off-white header */
+            border-radius: var(--border-radius) var(--border-radius) 0 0; /* Match top radius */
+        }
+        .card-header h3 {
+            font-size: 1.2rem; font-weight: 600; color: var(--primary-color-start); margin: 0;
+        }
+        .card-header i { font-size: 1.25rem; color: var(--primary-color-end); opacity: 0.9; }
+        .card-body { flex-grow: 1; position: relative; }
+        .card-footer {
+            margin-top: 25px; padding-top: 15px; border-top: 1px solid var(--border-color);
+            text-align: right;
+        }
+        .card-footer a {
+             color: var(--primary-color-end); text-decoration: none; font-weight: 500; font-size: 0.9rem;
+             transition: color 0.2s ease;
+        }
+        .card-footer a:hover { color: var(--primary-color-start); }
+
+        /* Balance Card Specifics */
+        .balance-card { background: linear-gradient(140deg, var(--primary-color-start), #0065c2); color: var(--text-on-primary); }
+        .balance-card .card-header {
+             background-color: rgba(255,255,255,0.05); /* Transparent header */
+             border-bottom-color: rgba(255, 255, 255, 0.2);
+        }
+        .balance-card .card-header h3, .balance-card .card-header i { color: rgba(255, 255, 255, 0.95); }
+        .balance-info { text-align: center; padding: 20px 0 10px 0; }
+        .balance-label { font-size: 1rem; opacity: 0.85; margin-bottom: 8px; display: block; }
+        .balance-amount { font-size: 3.2rem; font-weight: 600; letter-spacing: -1px; margin-bottom: 25px; }
+        .balance-card .card-footer { border-top-color: rgba(255, 255, 255, 0.2); }
+        .balance-card .card-footer a { color: rgba(255, 255, 255, 0.9); }
+        .balance-card .card-footer a:hover { color: white; }
+
+
+        /* Transactions Card Specifics */
+        .transactions-card .card-header { /* Standard header for this card */
+             background-color: #fcfdff; border-bottom: 1px solid var(--border-color);
+        }
+         .transactions-card .card-header h3, .transactions-card .card-header i {
+             color: var(--primary-color-start); color: var(--primary-color-end); opacity: 1;
+         }
+        .transactions-card .card-body { padding: 0; margin: 0 -30px -30px -30px; /* Negative margin to fill card */ }
+        .transaction-list { list-style: none; padding: 0; margin: 0; max-height: 400px; overflow-y: auto; }
+        .transaction-list li {
+            display: flex; align-items: center; padding: 18px 30px;
+            border-bottom: 1px solid var(--border-color); transition: background-color 0.2s ease;
+        }
+        .transaction-list li:last-child { border-bottom: none; }
+        .transaction-list li:hover { background-color: #f8f9fa; }
+        .transaction-icon {
+             font-size: 1.4rem; margin-right: 18px; width: 35px; height: 35px;
+             display: inline-flex; align-items: center; justify-content: center;
+             border-radius: 50%; background-color: var(--secondary-color); color: var(--primary-color-end);
+        }
+        .transaction-icon.income { background-color: #e8f5e9; color: var(--success-color); } /* Lighter green bg */
+        .transaction-icon.expense { background-color: #fceeed; color: var(--danger-color); } /* Lighter red bg */
+        .transaction-details { flex-grow: 1; margin-right: 15px; }
+        .transaction-description { font-weight: 500; display: block; margin-bottom: 3px; color: var(--text-color); font-size: 0.95rem;}
+        .transaction-date { font-size: 0.8rem; color: var(--text-color-light); }
+        .transaction-amount { font-weight: 600; white-space: nowrap; font-size: 1rem; }
+        .amount-positive { color: var(--success-color); }
+        .amount-negative { color: var(--text-color); }
+
+        /* Chart Card (Income/Expense) */
+         .income-expense-card .chart-container {
+             position: relative; height: 340px; width: 100%; padding-top: 10px;
+         }
+
+
+        /* --- My Cards Section --- */
+        .my-cards-section .cards-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 30px;
+        }
+        .bank-card {
+            padding: 25px; border-radius: var(--border-radius); color: white;
+            position: relative; overflow: hidden; min-height: 180px;
+            display: flex; flex-direction: column; justify-content: space-between;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2); transition: transform 0.3s ease;
+        }
+        .bank-card:hover { transform: scale(1.03); }
+        .bank-card.visa { background: linear-gradient(220deg, #1a1f71, #636bd6); }
+        .bank-card.mastercard { background: linear-gradient(220deg, #e70f25, #f9a22a); }
+        .bank-card.default { background: linear-gradient(220deg, #495057, #adb5bd); }
+        .bank-card .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+        .bank-card .card-chip { width: 45px; height: 35px; background-color: #e0ac53; border-radius: 6px; }
+        .bank-card .card-type-icon { font-size: 2.8rem; opacity: 0.9; }
+        .bank-card .card-bottom { margin-top: 15px; }
+        .bank-card .card-number {
+            font-family: 'Courier New', Courier, monospace; font-size: 1.4rem; letter-spacing: 3px; margin-bottom: 15px;
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.15);
+        }
+        .bank-card .card-details { display: flex; justify-content: space-between; font-size: 0.9rem; opacity: 0.95; }
+        .bank-card .card-holder-label, .bank-card .card-expiry-label { font-size: 0.7rem; opacity: 0.8; display: block; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px;}
+
+
+        .add-card-button {
+             display: flex; flex-direction: column; justify-content: center; align-items: center;
+             border: 2px dashed var(--border-color); color: var(--text-color-light);
+             min-height: 180px; border-radius: var(--border-radius); transition: all 0.3s ease; cursor: pointer;
+             background-color: var(--card-bg); box-shadow: 0 6px 20px var(--shadow-color);
+        }
+        .add-card-button:hover {
+            border-color: var(--primary-color-end); color: var(--primary-color-start); background-color: #fcfdff;
+             box-shadow: 0 10px 25px rgba(100, 115, 140, 0.15); transform: translateY(-3px);
+         }
+        .add-card-button i { font-size: 2rem; margin-bottom: 10px; }
+        .add-card-button span { font-weight: 500; }
+
+        /* --- Quick Actions & Utility Section --- */
+        .quick-actions-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 25px;
+        }
+        .action-item {
+            background-color: var(--card-bg); border-radius: var(--border-radius);
+            padding: 25px 15px; text-align: center; cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 6px 20px var(--shadow-color);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-height: 130px;
+        }
+        .action-item:hover {
+             transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0, 64, 135, 0.15);
+             color: var(--primary-color-start);
+        }
+        .action-item i {
+             font-size: 2.2rem; margin-bottom: 15px;
+             color: var(--primary-color-end); transition: color 0.2s ease;
+        }
+        .action-item:hover i { color: var(--primary-color-start); }
+        .action-item span { font-size: 0.95rem; font-weight: 500; line-height: 1.3; }
+
+        /* Utility Payments Card */
+        .utility-payments-card {
+             /* This item will span multiple columns */
+             grid-column: 1 / -1; /* Span full width available in its row */
+             /* Or use specific spans like grid-column: span 2; if needed */
+             background-color: var(--card-bg); border-radius: var(--border-radius);
+             padding: 25px 30px;
+             box-shadow: 0 6px 20px var(--shadow-color);
+             transition: none; /* Disable hover effect for the container card */
+        }
+         .utility-payments-card:hover { transform: none; box-shadow: 0 6px 20px var(--shadow-color); } /* Prevent hover lift */
+         .utility-payments-card h4 { font-size: 1.1rem; font-weight: 600; text-align: left; margin-bottom: 20px; color: var(--primary-color-start);}
+
+         /* Grid for individual utility items (inside the card) */
+         .utility-items-grid {
+             display: grid;
+             grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+             gap: 20px;
+         }
+         /* Styling for each utility item to look like a mini-card/button */
+         .utility-item {
+             background-color: var(--secondary-color);
+             border-radius: 10px;
+             padding: 15px 10px;
+             text-align: center;
+             cursor: pointer;
+             transition: background-color 0.2s ease, transform 0.2s ease;
+             border: 1px solid var(--border-color);
+         }
+         .utility-item:hover {
+              background-color: #e9f1f9; /* Light blue hover */
+              transform: translateY(-3px);
+         }
+         .utility-item i {
+             font-size: 1.8rem; margin-bottom: 10px;
+             color: var(--primary-color-end);
+             display: block; /* Ensure icon takes block space */
+         }
+         .utility-item span {
+             font-size: 0.8rem; font-weight: 500; display: block; color: var(--text-color);
+         }
+
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #e9ecef; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #ced4da; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #adb5bd; }
+
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 1200px) {
+            .main-content { max-width: 100%; padding: 0 20px; }
+            .dashboard-grid { gap: 25px; }
+            .my-cards-section .cards-grid { gap: 25px; }
+            .quick-actions-grid { gap: 20px; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));}
+        }
+        @media (max-width: 992px) {
+            .dashboard-grid { grid-template-columns: 1fr; /* Stack main cards sooner */ }
+            .welcome-header h2 { font-size: 2rem; }
+            .quick-actions-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));}
+             .utility-items-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 15px;}
+        }
+        @media (max-width: 768px) {
+             .navbar { padding: 0 20px; }
+             .main-content { margin-top: 25px; padding: 0 20px; }
+             .welcome-header { text-align: center; margin-bottom: 25px;}
+             .my-cards-section .cards-grid { grid-template-columns: 1fr; } /* Stack bank cards */
+             .quick-actions-grid { grid-template-columns: repeat(3, 1fr); } /* 3 actions per row */
+             .card { padding: 25px; }
+             .card-header { margin: -25px -25px 20px -25px; padding: 18px 25px;}
+             .balance-amount { font-size: 2.8rem; }
+             .transaction-list li { padding: 15px 20px; }
+             .action-item { min-height: 120px; padding: 20px 10px;}
+             .action-item i { font-size: 2rem;}
+             .action-item span { font-size: 0.9rem; }
+             .chart-container { height: 300px; }
+             .utility-payments-card { padding: 20px; }
+             .utility-payments-card h4 { margin-bottom: 15px; }
+        }
+         @media (max-width: 576px) { /* Extra breakpoint for smaller phones */
+             .quick-actions-grid { grid-template-columns: repeat(2, 1fr); gap: 15px;} /* 2 actions per row */
+             .utility-items-grid { grid-template-columns: repeat(3, 1fr); gap: 12px;} /* Maybe 3 utility icons fit */
+             .bank-card .card-number { font-size: 1.2rem; letter-spacing: 2px; }
+             .transaction-icon { width: 30px; height: 30px; font-size: 1.2rem; margin-right: 12px;}
+             .transaction-description {font-size: 0.9rem;}
+             .transaction-amount { font-size: 0.95rem;}
+             .chart-container { height: 280px; }
+         }
+         @media (max-width: 420px) {
+             .navbar { padding: 0 15px; height: 60px;}
+             body { padding-top: 60px;}
+             .main-content { margin-top: 20px; padding: 0 15px;}
+             .welcome-header h2 { font-size: 1.7rem; }
+             .welcome-header p { font-size: 1rem; }
+             .section-title { font-size: 1.3rem; }
+             #logoutButton { padding: 7px 14px; font-size: 0.8rem;}
+             .utility-items-grid { grid-template-columns: repeat(2, 1fr); } /* 2 utility icons on very small */
+             .action-item i { font-size: 1.8rem;}
+             .action-item span { font-size: 0.85rem; }
+         }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 0;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--primary-color-start);
+            color: white;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+
+        .modal-header h4 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .modal-header i {
+            font-size: 1.3rem;
+        }
+
+        .modal-body {
+            padding: 25px;
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--text-color);
+        }
+
+        .modal-footer {
+            padding: 20px 25px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+
+        .modal-button {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 0.95rem;
+        }
+
+        .modal-button.cancel {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+
+        .modal-button.confirm {
+            background: linear-gradient(90deg, var(--primary-color-start), var(--primary-color-end));
+            color: white;
+        }
+
+        .modal-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .modal-button.cancel:hover {
+            background-color: #e9ecef;
+        }
+
+        .modal-button.confirm:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 576px) {
+            .modal-content {
+                width: calc(100% - 30px);
+            }
+            .modal-button {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
 
     <header class="navbar">
-        <div class="nav-container">
-             <!-- Changed Brand Name -->
-            <a href="{{ url_for('home') }}" class="navbar-brand">Islington Bank</a>
-            <a href="{{ url_for('logout') }}" id="logoutButton">Logout</a>
-        </div>
+        <a href="{{ url_for('home') }}" class="navbar-brand">Islington Bank</a>
+        <a href="{{ url_for('logout') }}" id="logoutButton">Logout</a>
     </header>
 
     <main class="main-content">
-        <!-- Flash Messages Placeholder -->
+        <!-- Flash Messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
-            <ul class="flash-messages">
+            <ul class="flash-messages" style="list-style: none; padding: 0; margin-bottom: 20px;">
             {% for category, message in messages %}
-              <li class="{{ category }}">{{ message }}</li>
+              <li class="{{ category }}" style="padding: 12px 18px; border-radius: 8px; margin-bottom: 10px; text-align: center; font-weight: 500;">{{ message }}</li>
             {% endfor %}
             </ul>
+            <style> /* Basic flash styles */
+              .flash-messages .success { background-color: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; }
+              .flash-messages .danger { background-color: #f8d7da; color: #842029; border: 1px solid #f5c2c7; }
+              .flash-messages .info { background-color: #cff4fc; color: #055160; border: 1px solid #b6effb; }
+            </style>
           {% endif %}
         {% endwith %}
 
-        <!-- Changed Heading -->
-        <h2>Welcome to Islington Bank!</h2>
-        <!-- **** Updated Welcome Message using USERNAME **** -->
-        <p class="welcome-message">Hello, <strong>{{ username }}</strong></p>
-        <p>Your secure and intelligent banking experience starts here.</p>
-
-        <div class="content-box">
-            <h3>Account Dashboard</h3>
-            <p>This is your personalized dashboard. Future updates will show your account summaries, recent transactions, and AI-powered financial insights.</p>
-             <ul>
-                <li>Account Balances (Coming Soon)</li>
-                <li>Recent Activity (Coming Soon)</li>
-                <li>Spending Analysis (Coming Soon)</li>
-            </ul>
+        <div class="welcome-header">
+            <h2>Welcome Back, <strong>{{ username }}</strong>!</h2>
+            <p>Your financial command center.</p>
         </div>
 
-         <div class="content-box">
-            <h3>Security Center</h3>
-            <p>Your account is protected by password and facial recognition technology.</p>
-            <p>If you ever receive a security alert email about a failed login attempt that wasn't you, please change your password immediately and contact our support team.</p>
-            <p>Your registered email: {{ email }}</p>
-         </div>
+        <!-- Main Info Cards Section -->
+        <section class="dashboard-section">
+            <div class="dashboard-grid">
+
+                <!-- Balance Card -->
+                <div class="card balance-card">
+                    <div class="card-header">
+                        <h3>Account Balance</h3>
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="card-body">
+                        <div class="balance-info">
+                            <span class="balance-label">Available Balance</span>
+                            <!-- Static Balance Example -->
+                            <div class="balance-amount" id="accountBalance">£755.82</div>
+                        </div>
+                    </div>
+                    <div class="card-footer"><a href="#">View Statements</a></div>
+                </div>
+
+                <!-- Transactions Card -->
+                <div class="card transactions-card">
+                    <div class="card-header">
+                        <h3>Recent Transactions</h3>
+                        <i class="fas fa-exchange-alt"></i> <!-- Changed icon -->
+                    </div>
+                    <div class="card-body">
+                        <ul class="transaction-list" id="transactionList">
+                             <li style="justify-content: center; padding: 40px 20px; color: var(--text-color-light);">
+                                <i class="fas fa-spinner fa-spin" style="margin-right: 10px;"></i> Loading transactions...
+                             </li>
+                        </ul>
+                    </div>
+                     <!-- Footer removed for cleaner look, maybe add later -->
+                </div>
+
+                 <!-- Income vs Expense Chart -->
+                <div class="card income-expense-card">
+                    <div class="card-header">
+                        <h3>Income vs Expense</h3> <!-- Simplified Title -->
+                         <i class="fas fa-chart-column"></i> <!-- Column Chart Icon -->
+                    </div>
+                    <div class="card-body">
+                         <div class="chart-container">
+                            <canvas id="incomeExpenseChart"></canvas>
+                         </div>
+                    </div>
+                </div>
+
+            </div> <!-- End Dashboard Grid -->
+        </section>
+
+         <!-- My Cards Section -->
+         <section class="dashboard-section my-cards-section">
+             <h3 class="section-title">My Cards</h3>
+             <div class="cards-grid">
+                 <!-- Card 1 (Example Visa) -->
+                 <div class="bank-card visa">
+                     <div class="card-top">
+                          <div class="card-chip"></div>
+                          <i class="fab fa-cc-visa card-type-icon"></i>
+                     </div>
+                     <div class="card-bottom">
+                         <div class="card-number" id="card1-number">**** **** **** ****</div>
+                         <div class="card-details">
+                             <div>
+                                 <span class="card-holder-label">Card Holder</span>
+                                 <span id="card1-holder">{{ username | upper }}</span>
+                             </div>
+                             <div>
+                                 <span class="card-expiry-label">Expires</span>
+                                 <span id="card1-expiry">MM/YY</span>
+                             </div>
+                         </div>
+                    </div>
+                 </div>
+
+                  <!-- Card 2 (Example Mastercard) -->
+                 <div class="bank-card mastercard">
+                     <div class="card-top">
+                          <div class="card-chip"></div>
+                           <i class="fab fa-cc-mastercard card-type-icon"></i>
+                     </div>
+                      <div class="card-bottom">
+                         <div class="card-number" id="card2-number">**** **** **** ****</div>
+                         <div class="card-details">
+                             <div>
+                                 <span class="card-holder-label">Card Holder</span>
+                                 <span id="card2-holder">{{ username | upper }}</span>
+                             </div>
+                             <div>
+                                 <span class="card-expiry-label">Expires</span>
+                                 <span id="card2-expiry">MM/YY</span>
+                             </div>
+                         </div>
+                    </div>
+                 </div>
+
+                 <!-- Add New Card Button -->
+                 <button type="button" class="add-card-button">
+                      <i class="fas fa-plus-circle"></i>
+                      <span>Add New Card</span>
+                 </button>
+             </div>
+         </section>
+
+
+        <!-- Quick Actions Section -->
+        <section class="dashboard-section quick-actions-section">
+            <h3 class="section-title">Quick Actions</h3>
+            <div class="quick-actions-grid">
+                <div class="action-item">
+                    <i class="fas fa-paper-plane"></i>
+                    <span>Send Money</span>
+                </div>
+                <div class="action-item">
+                    <i class="fas fa-arrow-down"></i> <!-- Changed Icon -->
+                    <span>Load Money</span>
+                </div>
+                 <div class="action-item">
+                    <i class="fas fa-random"></i> <!-- Changed Icon -->
+                    <span>Transfer</span>
+                </div>
+
+                 <!-- Utility Payments Card - Spans multiple columns -->
+                 <div class="utility-payments-card">
+                      <h4>Utility & Top-ups</h4>
+                      <div class="utility-items-grid"> <!-- Grid for items inside -->
+                           <div class="utility-item"> <i class="fas fa-mobile-alt"></i> <span>Mobile Top-up</span> </div>
+                           <div class="utility-item"> <i class="fas fa-wifi"></i> <span>Internet</span> </div>
+                           <div class="utility-item"> <i class="fas fa-lightbulb"></i> <span>Electricity</span> </div>
+                           <div class="utility-item"> <i class="fas fa-tv"></i> <span>TV / Cable</span> </div>
+                            <div class="utility-item"> <i class="fas fa-graduation-cap"></i> <span>Education Fee</span> </div>
+                            <div class="utility-item"> <i class="fas fa-ellipsis-h"></i> <span>More Bills</span> </div>
+                      </div>
+                 </div>
+
+                 <div class="action-item">
+                    <i class="fas fa-receipt"></i> <!-- Changed Icon -->
+                    <span>Statements</span>
+                </div>
+                 <div class="action-item">
+                    <i class="fas fa-sliders-h"></i> <!-- Changed Icon -->
+                    <span>Settings</span>
+                </div>
+
+            </div>
+        </section>
 
     </main>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("Home dashboard script loaded V3.");
+
+            // --- Helper Functions ---
+            const formatCurrency = (amount, symbol = '£') => {
+                return `${symbol}${amount.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            };
+
+            const formatTransactionAmount = (amount, symbol = '£') => {
+                const value = Math.abs(amount).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                return amount < 0 ? `- ${symbol}${value}` : `+ ${symbol}${value}`;
+            };
+
+            const getRandomDate = (start = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), end = new Date()) => {
+                return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+            };
+
+            const getRandomElement = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+            // --- Dynamic Data Generation (Refined) ---
+            function generateDashboardData() {
+                const data = {
+                    // Fixed balance for demonstration
+                    balance: 755.82, // <--- Set Balance as requested
+                    currencySymbol: '£',
+                    transactions: [],
+                    // Simplified categories for demo focus
+                    expenseCategories: ['Groceries', 'Dining', 'Shopping', 'Transport', 'Bills', 'Entertainment', 'Other'],
+                    incomeSources: ['Salary', 'Project Payment', 'Refund'],
+                    expenseDescriptions: {
+                         'Groceries': ['Local Supermarket', 'Tesco Express', 'Online Groceries'],
+                         'Dining': ['Coffee Shop', 'Restaurant Bill', 'Takeaway Order'],
+                         'Shopping': ['Amazon Order', 'Clothing Store', 'Electronics Purchase'],
+                         'Transport': ['Oyster Card Top-up', 'Train Fare', 'Parking Fee'],
+                         'Bills': ['Electricity Bill', 'Mobile Phone Bill', 'Internet Service'],
+                         'Entertainment': ['Cinema Ticket', 'Streaming Service', 'Concert Entry'],
+                         'Other': ['ATM Cash', 'Bookstore', 'Miscellaneous']
+                    },
+                     cards: [ // Keep card generation random
+                         { type: 'visa', last4: String(Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000), expiryMonth: String(Math.floor(Math.random() * 12) + 1).padStart(2, '0'), expiryYear: String(new Date().getFullYear() + Math.floor(Math.random()*4) + 2).slice(-2) },
+                         { type: 'mastercard', last4: String(Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000), expiryMonth: String(Math.floor(Math.random() * 12) + 1).padStart(2, '0'), expiryYear: String(new Date().getFullYear() + Math.floor(Math.random()*4) + 1).slice(-2) }
+                    ]
+                };
+
+                const numTransactions = Math.floor(Math.random() * 12) + 8; // 8-19 transactions
+
+                for (let i = 0; i < numTransactions; i++) {
+                    const isIncome = Math.random() < 0.2; // 20% chance income
+                    let amount, description, category = 'Other';
+                    const date = getRandomDate();
+
+                    if (isIncome) {
+                        amount = Math.random() * 1500 + 400; // Income 400-1900
+                        description = getRandomElement(data.incomeSources);
+                        category = 'Income';
+                    } else {
+                        amount = -(Math.random() * 120 + 5); // Expense 5-125
+                        category = getRandomElement(data.expenseCategories);
+                        description = getRandomElement(data.expenseDescriptions[category] || data.expenseDescriptions['Other']);
+                    }
+
+                    data.transactions.push({
+                        id: i + 1, date: date.toISOString(), description: description,
+                        amount: amount, category: category
+                    });
+                }
+                data.transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                // Calculate totals
+                data.totalIncome = data.transactions.filter(tx => tx.amount > 0).reduce((sum, tx) => sum + tx.amount, 0);
+                data.totalExpense = data.transactions.filter(tx => tx.amount < 0).reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
+
+                return data;
+            }
+
+            const dashboardData = generateDashboardData();
+            const username = "{{ username | escape }}"; // Get username
+
+            // --- Populate Balance ---
+            // Already set statically in HTML for this demo, but could use:
+            // document.getElementById('accountBalance').textContent = formatCurrency(dashboardData.balance, dashboardData.currencySymbol);
+
+            // --- Populate Cards ---
+             dashboardData.cards.forEach((card, index) => {
+                 const numEl = document.getElementById(`card${index+1}-number`);
+                 const holderEl = document.getElementById(`card${index+1}-holder`);
+                 const expiryEl = document.getElementById(`card${index+1}-expiry`);
+                 if(numEl && holderEl && expiryEl){
+                     numEl.textContent = `**** **** **** ${card.last4}`;
+                     holderEl.textContent = username ? username.toUpperCase() : 'CARD HOLDER';
+                     expiryEl.textContent = `${card.expiryMonth}/${card.expiryYear}`;
+                 }
+            });
+
+            // --- Populate Transaction List ---
+            const transactionListElement = document.getElementById('transactionList');
+            if (transactionListElement) {
+                transactionListElement.innerHTML = ''; // Clear loading
+                if (dashboardData.transactions.length > 0) {
+                    dashboardData.transactions.forEach(tx => {
+                        const li = document.createElement('li');
+                        const dateObj = new Date(tx.date);
+                        let iconClass = 'fas fa-receipt expense'; // Default
+
+                        if (tx.amount > 0) { iconClass = 'fas fa-arrow-down income'; }
+                        else { // Assign specific expense icons
+                            const catLower = tx.category.toLowerCase();
+                            if (catLower.includes('groceries')) iconClass = 'fas fa-shopping-basket expense';
+                            else if (catLower.includes('dining')) iconClass = 'fas fa-utensils expense';
+                            else if (catLower.includes('shopping')) iconClass = 'fas fa-tags expense';
+                            else if (catLower.includes('transport')) iconClass = 'fas fa-bus-alt expense';
+                            else if (catLower.includes('bills')) iconClass = 'fas fa-file-invoice-dollar expense';
+                            else if (catLower.includes('entertainment')) iconClass = 'fas fa-film expense';
+                            else if (catLower.includes('other')) iconClass = 'fas fa-random expense'; // Changed Other icon
+                        }
+
+                        li.innerHTML = `
+                            <span class="transaction-icon ${iconClass.includes('income') ? 'income' : 'expense'}"><i class="${iconClass.split(' ')[0]} ${iconClass.split(' ')[1]}"></i></span>
+                            <div class="transaction-details">
+                                <span class="transaction-description">${tx.description}</span>
+                                <span class="transaction-date">
+                                    ${dateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })} ${dateObj.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
+                                </span>
+                            </div>
+                            <span class="transaction-amount ${tx.amount < 0 ? 'amount-negative' : 'amount-positive'}">
+                                ${formatTransactionAmount(tx.amount, dashboardData.currencySymbol)}
+                            </span>
+                        `;
+                        transactionListElement.appendChild(li);
+                    });
+                } else {
+                    transactionListElement.innerHTML = '<li style="justify-content: center; padding: 40px 20px; color: var(--text-color-light);">No recent transactions.</li>';
+                }
+            }
+
+
+            // --- Initialize Income/Expense Chart ---
+            const initIncomeExpenseChart = () => {
+                const ctx = document.getElementById('incomeExpenseChart');
+                if (ctx && typeof Chart !== 'undefined') {
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Income vs Expense'], // One group label
+                            datasets: [
+                               {
+                                   label: 'Income', data: [dashboardData.totalIncome],
+                                   backgroundColor: 'rgba(28, 124, 69, 0.8)', // Accent Green with opacity
+                                   borderColor: 'rgba(28, 124, 69, 1)', borderWidth: 1,
+                                   borderRadius: 5, barPercentage: 0.6 // Adjust bar thickness
+                               },
+                               {
+                                   label: 'Expense', data: [dashboardData.totalExpense],
+                                   backgroundColor: 'rgba(209, 52, 56, 0.7)', // Danger Red with opacity
+                                   borderColor: 'rgba(209, 52, 56, 1)', borderWidth: 1,
+                                   borderRadius: 5, barPercentage: 0.6
+                               }
+                           ]
+                        },
+                        options: {
+                            responsive: true, maintainAspectRatio: false, indexAxis: 'y', // Makes bars horizontal
+                             scales: {
+                                 x: { beginAtZero: true, grid: { display: true, color: '#eef2f7' }, ticks: { callback: value => formatCurrency(value, dashboardData.currencySymbol).replace('+ ',''), font: { size: 10 } } },
+                                 y: { grid: { display: false }, ticks: { display: false } } // Hide Y-axis labels/ticks
+                             },
+                             plugins: {
+                                legend: { display: true, position: 'bottom', labels:{ boxWidth: 12, padding: 15 } },
+                                tooltip: {
+                                    callbacks: {
+                                        label: (context) => `${context.dataset.label}: ${formatCurrency(context.raw, dashboardData.currencySymbol).replace('+ ','')}`
+                                    }
+                                },
+                                title: { display: false }
+                            }
+                        }
+                    });
+                } else {
+                    console.warn("Income/Expense chart canvas element not found or Chart.js not loaded.");
+                    const chartContainer = document.getElementById('incomeExpenseChart')?.parentNode;
+                    if (chartContainer) {
+                        chartContainer.innerHTML = '<p style="text-align:center; padding: 30px; color: var(--text-color-light);">Could not load income/expense chart.</p>';
+                    }
+                }
+            };
+
+            // Run chart initialization
+            initIncomeExpenseChart();
+
+        }); // End DOMContentLoaded
+    </script>
+
+    <!-- Logout Confirmation Modal -->
+    <div id="logoutModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Confirm Logout</h4>
+                <i class="fas fa-sign-out-alt"></i>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to logout?
+            </div>
+            <div class="modal-footer">
+                <button id="cancelLogout" class="modal-button cancel">No, Stay</button>
+                <button id="confirmLogout" class="modal-button confirm">Yes, Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Logout Modal Functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const logoutBtn = document.getElementById('logoutButton');
+            const modal = document.getElementById('logoutModal');
+            const cancelBtn = document.getElementById('cancelLogout');
+            const confirmBtn = document.getElementById('confirmLogout');
+
+            // Show modal when logout button is clicked
+            logoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                modal.style.display = 'flex';
+                setTimeout(() => modal.classList.add('show'), 10);
+            });
+
+            // Hide modal when cancel is clicked
+            cancelBtn.addEventListener('click', () => {
+                modal.classList.remove('show');
+                setTimeout(() => modal.style.display = 'none', 300);
+            });
+
+            // Proceed with logout when confirm is clicked
+            confirmBtn.addEventListener('click', () => {
+                window.location.href = logoutBtn.href;
+            });
+
+            // Close modal if clicked outside
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('show');
+                    setTimeout(() => modal.style.display = 'none', 300);
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>
